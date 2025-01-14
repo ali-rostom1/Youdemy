@@ -1,5 +1,6 @@
 <?php
 
+use App\DAO\CategoryDAO;
 use App\DAO\CourseDAO;
 use App\DAO\UserDAO;
 use App\Router;
@@ -30,6 +31,7 @@ use App\Router;
     // $router->dispatch($requestedURI);
 
 
-
+    $category = new CategoryDAO();
+    dd($category->getAllCategories());
 
 
