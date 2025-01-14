@@ -107,4 +107,28 @@
                     ]);
             }
         }
+        public function updateCourse(Course $course): bool 
+        { 
+            $query = "UPDATE Courses SET title = :title, description = :description, type = :type, content = :content, category_id = :category_id, teacher_id = :teacher_id WHERE course_id = :id";
+            $stmt = $this->con->prepare($query); 
+            $result = $stmt->execute([ 
+                'id' => $course->id, 
+                'title' => $course->title, 
+                'description' => $course->description, 
+                'type' => $course->type, 
+                'content' => $course->content, 
+                'category_id' => $course->category->id, 
+                'teacher_id' => $course->teacher->id
+            ]); 
+            if ($result) { 
+                $this->saveTags($course->id,$course->tags); 
+                return true; 
+            } 
+            return false; 
+        }
+        public function deleteCourse(int $id): bool 
+        { 
+            $stmt = $this->con->prepare("DELETE FROM Courses WHERE course_id = :id"); 
+            return $stmt->execute(['id' => $id]); 
+        }
     }
