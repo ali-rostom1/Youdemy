@@ -14,12 +14,15 @@
         protected array $tags = [];
 
 
-        public function __construct($id, $title, $description,$type,$content){
+        public function __construct($id, $title, $description,$type,$content,Category $category,User $teacher,$tags = []){
             $this->id = $id;
             $this->title = $title;
             $this->description = $description;
             $this->type = $type;
             $this->content = $content;
+            $this->category = $category;
+            $this->teacher = $teacher;
+            $this->tags = $tags;
         }
 
         public function __get($attr){
