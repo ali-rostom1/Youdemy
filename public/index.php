@@ -1,6 +1,7 @@
 <?php
 
 use App\DAO\CourseDAO;
+use App\DAO\UserDAO;
 use App\Router;
     use Dotenv\Dotenv;
 
@@ -28,9 +29,7 @@ use App\Router;
     // //DISPATCHING REQUEST BASED ON ROUTES ADDED
     // $router->dispatch($requestedURI);
 
-    $CourseDAO = new CourseDAO();
-    $data = $CourseDAO->getAllCourses();
-    dd($data);
+
 
 
 

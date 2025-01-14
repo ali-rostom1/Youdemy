@@ -3,10 +3,9 @@ namespace App\DAO;
 
 use App\Database\Database;
 use App\Entity\User;
-use PDO;
 
 class UserDAO {
-    private PDO $con;
+    private \PDO $con;
 
     public function __construct() {
         $this->con = Database::getInstance()->getConnection();
@@ -30,7 +29,7 @@ class UserDAO {
     {
         $query = "SELECT * FROM Users";
         $stmt = $this->con->query($query);
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $users = [];
         foreach ($rows as $row) {
@@ -43,9 +42,10 @@ class UserDAO {
     {
         $query = "SELECT * FROM Users WHERE user_id = :user_id";
         $stmt = $this->con->prepare($query);
-        $stmt->bindParam(':user_id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':user_id', $id, \PDO::PARAM_INT);
         $stmt->execute();
-        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        if ($row) {
             return $this->mapRowToUser($row);
         }
         return null;
@@ -83,9 +83,9 @@ class UserDAO {
     public function getUserByUsername(string $username): ?User {
         $query = "SELECT * FROM Users WHERE username = :username";
         $stmt = $this->con->prepare($query);
-        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+        $stmt->bindParam(':username', $username, \PDO::PARAM_STR);
         $stmt->execute();
-        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
             return $this->mapRowToUser($row);
         }
         return null;

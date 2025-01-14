@@ -67,7 +67,8 @@
             $stmt = $this->con->prepare($query);
             $stmt->bindParam(":course_id",$id,\PDO::PARAM_INT);
             $stmt->execute();
-            if($row = $stmt->fetch(\PDO::FETCH_ASSOC)){
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+            if($row){
                 return $this->mapRowToCourse($row);
             }else return NULL;
         }
