@@ -101,5 +101,5 @@ SELECT
 FROM Courses c 
 JOIN Categories ct ON c.category_id = ct.category_id 
 JOIN Users u ON c.teacher_id = u.user_id
-JOIN Enrollments e ON c.course_id = e.course_id
+JOIN Enrollment e ON c.course_id = e.course_id
 JOIN Users eu ON e.user_id = eu.user_id;
