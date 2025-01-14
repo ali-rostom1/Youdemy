@@ -38,3 +38,11 @@ CREATE TABLE Course_Tags (
     FOREIGN KEY (course_id) REFERENCES Courses(course_id), 
     FOREIGN KEY (tag_id) REFERENCES Tags(tag_id) 
 );
+
+CREATE TABLE Enrollment ( 
+	enrollment_id INT AUTO_INCREMENT PRIMARY KEY, 
+    user_id INT, course_id INT, 
+    enrollment_date DATE, 
+    FOREIGN KEY (user_id) REFERENCES Users(user_id), 
+    FOREIGN KEY (course_id) REFERENCES Courses(course_id) 
+);
