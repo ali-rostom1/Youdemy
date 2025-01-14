@@ -31,3 +31,10 @@ CREATE TABLE Tags (
 	tag_id INT AUTO_INCREMENT PRIMARY KEY, 
     name VARCHAR(50) NOT NULL 
 );
+
+CREATE TABLE Course_Tags ( 
+	course_id INT, tag_id INT,
+    PRIMARY KEY (course_id, tag_id), 
+    FOREIGN KEY (course_id) REFERENCES Courses(course_id), 
+    FOREIGN KEY (tag_id) REFERENCES Tags(tag_id) 
+);
