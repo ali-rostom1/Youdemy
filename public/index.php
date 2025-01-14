@@ -21,6 +21,7 @@
     });
     
     $requestedURI = $_SERVER["REQUEST_URI"];
+    $requestedURI = parse_url($requestedURI,PHP_URL_PATH); // removing the get queries
 
     //DISPATCHING REQUEST BASED ON ROUTES ADDED
     $router->dispatch($requestedURI);
