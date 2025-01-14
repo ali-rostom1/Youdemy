@@ -3,7 +3,9 @@
 use App\DAO\CategoryDAO;
 use App\DAO\CourseDAO;
 use App\DAO\EnrollmentDAO;
+use App\DAO\TagDAO;
 use App\DAO\UserDAO;
+use App\Entity\Tag;
 use App\Router;
     use Dotenv\Dotenv;
 
@@ -32,7 +34,7 @@ use App\Router;
     // $router->dispatch($requestedURI);
 
 
-    $category = new EnrollmentDAO();
-    dd($category->getAllEnrollments());
+
+   
 
 
