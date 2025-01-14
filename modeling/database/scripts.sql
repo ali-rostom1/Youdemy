@@ -103,3 +103,15 @@ JOIN Categories ct ON c.category_id = ct.category_id
 JOIN Users u ON c.teacher_id = u.user_id
 JOIN Enrollment e ON c.course_id = e.course_id
 JOIN Users eu ON e.user_id = eu.user_id;
+
+alter table enrollment modify column enrollment_date timestamp default current_timestamp;
+ALTER TABLE Enrollment ADD CONSTRAINT unique_user_course UNIQUE (user_id, course_id);
+
+INSERT INTO Enrollment (user_id, course_id, enrollment_date) VALUES 
+(1, 5),
+(2, 5),
+(1, 6),
+(3, 6),
+(4, 6),
+(2, 7),
+(3, 8);
