@@ -83,3 +83,5 @@ SELECT
 FROM Courses c 
 JOIN Categories ct ON c.category_id = ct.category_id 
 JOIN Users u ON c.teacher_id = u.user_id;
+
+CREATE VIEW courseCategoryUserEnrollment AS SELECT c.*, ct.name AS category_name, ct.description AS category_description, u.username AS teacher_name, u.email AS teacher_email, u.status AS status, e.enrollment_id, e.enrollment_date, eu.username AS student_username, eu.email AS student_email, eu.role AS student_role, eu.status AS student_status FROM Courses c JOIN Categories ct ON c.category_id = ct.category_id JOIN Users u ON c.teacher_id = u.user_id JOIN Enrollments e ON c.course_id = e.course_id JOIN Users eu ON e.user_id = eu.user_id;
