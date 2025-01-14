@@ -62,3 +62,11 @@ INSERT INTO Tags (name) VALUES
 ('Beginner'), ('Intermediate'), 
 ('Advanced'), ('Professional'), 
 ('Programming'), ('Design');
+
+insert into users(username,password,email,role) values
+ ("Ali Rostom","$2y$10$sNi5RSrO2XDAAMqXkhh4TeGvIAxXIrnhMbQBuij/baUeKbNwoqWpS","ali.rostom@gmail.com","teacher"),
+ ("Ali Rostom123","$2y$10$sNi5RSrO2XDAAMqXkhh4TeGvIAxXIrnhMbQBuij/baUeKbNwoqWpS","ali.rostom123@gmail.com","teacher"),
+ ("Ali Rostom1234","$2y$10$sNi5RSrO2XDAAMqXkhh4TeGvIAxXIrnhMbQBuij/baUeKbNwoqWpS","ali.rostom1234@gmail.com","teacher"),
+ ("Ali Rostom12345","$2y$10$sNi5RSrO2XDAAMqXkhh4TeGvIAxXIrnhMbQBuij/baUeKbNwoqWpS","ali.rostom12345@gmail.com","teacher"),
+ ("Ali Rostom123456","$2y$10$sNi5RSrO2XDAAMqXkhh4TeGvIAxXIrnhMbQBuij/baUeKbNwoqWpS","ali.rostom123456@gmail.com","admin"),
+ ("Ali Rostom1234567","$2y$10$sNi5RSrO2XDAAMqXkhh4TeGvIAxXIrnhMbQBuij/baUeKbNwoqWpS","ali.rostom1234567@gmail.com","student");
