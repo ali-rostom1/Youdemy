@@ -49,3 +49,16 @@ CREATE TABLE Enrollment (
     FOREIGN KEY (course_id) REFERENCES Courses(course_id) 
 );
 ALTER TABLE Users MODIFY COLUMN role ENUM('student', 'teacher', 'admin') NOT NULL;
+
+alter table courses add column type ENUM("document","video") NOT NULL;
+
+INSERT INTO Categories (name, description) VALUES 
+('Mathematics', 'Courses related to mathematics and its applications.'), 
+('Science', 'Courses covering various scientific disciplines.'), 
+('Arts', 'Courses focused on arts, including music, painting, and more.'), 
+('Technology', 'Courses on technology, programming, and related fields.');
+
+INSERT INTO Tags (name) VALUES 
+('Beginner'), ('Intermediate'), 
+('Advanced'), ('Professional'), 
+('Programming'), ('Design');
