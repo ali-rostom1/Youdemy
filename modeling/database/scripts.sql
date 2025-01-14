@@ -71,3 +71,15 @@ insert into users(username,password,email,role) values
 ("Ali Rostom1234567","$2y$10$sNi5RSrO2XDAAMqXkhh4TeGvIAxXIrnhMbQBuij/baUeKbNwoqWpS","ali.rostom1234567@gmail.com","student");
 
 INSERT INTO Course_Tags (course_id, tag_id) VALUES (5, 1), (5, 5), (6, 1), (6, 6), (7, 1), (8, 3), (8, 5);
+
+create view courseCategoryUser AS 
+SELECT 
+	c.*,
+    ct.name AS category_name,
+    ct.description AS category_description,
+    u.username AS teacher_name, 
+    u.email AS teacher_email,
+    u.status AS status
+FROM Courses c 
+JOIN Categories ct ON c.category_id = ct.category_id 
+JOIN Users u ON c.teacher_id = u.user_id;

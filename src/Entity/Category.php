@@ -7,7 +7,7 @@
         private string $name; 
         private string $description;
 
-        public function __construct($id=NULL,$name,$description)
+        public function __construct($name,$description,$id=NULL)
         {
             $this->id = $id; 
             $this->name = $name; 
