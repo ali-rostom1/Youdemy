@@ -26,3 +26,8 @@ CREATE TABLE Courses (
     FOREIGN KEY (teacher_id) REFERENCES Users(user_id),
     Foreign Key (category_id) REFERENCES Categories(category_id)
 );
+
+CREATE TABLE Tags ( 
+	tag_id INT AUTO_INCREMENT PRIMARY KEY, 
+    name VARCHAR(50) NOT NULL 
+);
