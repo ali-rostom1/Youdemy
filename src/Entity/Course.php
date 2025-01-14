@@ -9,7 +9,9 @@
         protected string $description;
         protected string $type;
         protected string $content;
-        
+        protected Category $category; 
+        protected User $teacher; 
+        protected array $tags = [];
 
 
         public function __construct($id, $title, $description,$type,$content){
