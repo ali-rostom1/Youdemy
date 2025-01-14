@@ -93,5 +93,18 @@
             }
             return false;
         }
-        
+        public function saveTags(int $courseId,array $tags) : void
+        {
+            $stmt = $this->con->prepare("DELETE FROM course_tags WHERE course_id = :course_id");
+            $stmt->execute(['course_id' => $courseId]);
+            
+            $query = "INSERT INTO course_tags(course_id,tag_id) values (:course_id,:tag_id)";
+            $stmt = $this->con->prepare($query);
+            foreach($tags as $tag){
+                $stmt->execute([
+                    "course_id" => $courseId,
+                    "tag_id" =>  $tag->id
+                    ]);
+            }
+        }
     }
