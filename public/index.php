@@ -14,7 +14,7 @@
 
     //ADDING ROUTES
     $router->add("/",function(){
-       echo "hello"; 
+       include "../src/Views/home.php";
     });
     $router->add("/login",function(){
         echo "login";
