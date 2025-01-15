@@ -69,10 +69,10 @@
                             Rejoignez une communauté de passionnés et développez vos compétences avec des experts reconnus.
                         </p>
                         <div class="mt-8 flex justify-center gap-4">
-                            <a href="#" class="px-8 py-4 rounded-full text-white bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 font-medium text-lg">
+                            <a href="/catalogue" class="px-8 py-4 rounded-full text-white bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 font-medium text-lg">
                                 Découvrir les cours
                             </a>
-                            <a href="#" class="px-8 py-4 rounded-full text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 font-medium text-lg">
+                            <a href="/register" class="px-8 py-4 rounded-full text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 font-medium text-lg">
                                 Devenir formateur
                             </a>
                         </div>
@@ -107,14 +107,17 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-extrabold text-white text-center mb-12">Explorer par catégorie</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <?php foreach($categories as $category): ?>
                 <div class="group relative rounded-2xl bg-gradient-to-br from-gray-800 to-gray-800/50 border border-gray-700 p-8 hover:from-blue-900/20 hover:to-teal-900/20 transition-all">
                     <div class="h-12 w-12 bg-blue-500 rounded-xl flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-2">Développement Web</h3>
-                    <p class="text-gray-400">Maîtrisez les technologies web modernes</p>
+                    <h3 class="text-xl font-bold text-white mb-2"><?php echo $category->name ?></h3>
+                    <p class="text-gray-400"><?php echo $category->description ?></p>
                     <span class="mt-4 inline-block text-blue-400 font-medium">120 cours →</span>
                 </div>
+                <?php endforeach; ?>
+                
                 <!-- Repeat for other categories -->
             </div>
         </div>
