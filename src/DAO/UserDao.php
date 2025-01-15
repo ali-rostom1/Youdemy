@@ -80,10 +80,10 @@ class UserDAO {
         return $stmt->execute(['user_id' => $id]);
     }
 
-    public function getUserByUsername(string $username): ?User {
-        $query = "SELECT * FROM Users WHERE username = :username";
+    public function getUserByEmail(string $email): ?User {
+        $query = "SELECT * FROM Users WHERE email = :email";
         $stmt = $this->con->prepare($query);
-        $stmt->bindParam(':username', $username, \PDO::PARAM_STR);
+        $stmt->bindParam(':email', $email, \PDO::PARAM_STR);
         $stmt->execute();
         if ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
             return $this->mapRowToUser($row);
@@ -91,8 +91,8 @@ class UserDAO {
         return null;
     }
 
-    public function verifyPassword(string $username, string $password): bool {
-        $user = $this->getUserByUsername($username);
+    public function verifyPassword(string $email, string $password): bool {
+        $user = $this->getUserByEmail($email);
         if ($user) {
             return password_verify($password, $user->password);
         }

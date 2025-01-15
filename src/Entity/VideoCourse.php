@@ -12,5 +12,4 @@
         {
             return $this->content;
         }
-
     }

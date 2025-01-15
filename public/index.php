@@ -1,13 +1,14 @@
 <?php
 
-use App\Controller\CourseController;
-use App\DAO\CategoryDAO;
-use App\DAO\CourseDAO;
-use App\DAO\EnrollmentDAO;
-use App\DAO\TagDAO;
-use App\DAO\UserDAO;
-use App\Entity\Tag;
-use App\Router;
+    use App\Controller\AuthController;
+    use App\Controller\CourseController;
+    use App\DAO\CategoryDAO;
+    use App\DAO\CourseDAO;
+    use App\DAO\EnrollmentDAO;
+    use App\DAO\TagDAO;
+    use App\DAO\UserDAO;
+    use App\Entity\Tag;
+    use App\Router;
     use Dotenv\Dotenv;
 
     require_once "../vendor/autoload.php";
@@ -20,6 +21,7 @@ use App\Router;
     $router = new Router();
 
     $courseController = new CourseController();
+    $authController = new AuthController();
 
     //ADDING ROUTES
     $router->add("/",function() use ($courseController){
@@ -27,6 +29,15 @@ use App\Router;
     });
     $router->add("/catalogue",function() use ($courseController){
         $courseController->catalogue();
+    });
+    $router->add("/authentification",function() use ($authController){
+        $authController->index();
+    });
+    $router->add("/login",function () use ($authController){
+        $authController->login();
+    });
+    $router->add("/test",function(){
+        $courseDAO = new CourseDAO();
     });
     
     $requestedURI = $_SERVER["REQUEST_URI"];

@@ -21,8 +21,8 @@ class Authentification {
         return $this->userDAO->saveUser($user);
     }
 
-    public function login(string $username, string $password): ?User {
-        $user = $this->userDAO->getUserByUsername($username);
+    public function login(string $email, string $password): ?User {
+        $user = $this->userDAO->getUserByEmail($email);
 
         if ($user && password_verify($password, $user->password)) {
             session_start();
@@ -63,12 +63,24 @@ class Authentification {
         }
         return null;
     }
-    public function isAdmin() : bool
+    private function hasRole(string $role) : bool
     {
         if($this->isAuthenticated()){
-            $currentUser = $this->getCurrentUser();
-            return $currentUser->role === "admin";
-        }
-        return false;
+            $user = $this->getCurrentUser();
+            return $user->role === $role;
+        }else return false;
     }
+    public function isAdmin() : bool
+    {
+        return $this->hasRole("Admin");
+    }
+    public function isStudent() : bool
+    {
+        return $this->hasRole("Student");
+    }
+    public function isTeacher() : bool
+    {
+        return $this->hasRole("Teacher");
+    }
+
 }

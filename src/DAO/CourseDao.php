@@ -11,7 +11,7 @@
 
     class CourseDAO{
         private \PDO $con;
-        public static $perPage = 4;
+        public static $perPage = 2;
 
         public function __construct(){
             $this->con = Database::getInstance()->getConnection();
@@ -163,20 +163,23 @@
         public function getCoursesLimit($page) : ?array
         {
             $offset = ($page-1) * self::$perPage;
-            $query = "SELECT * FROM courseCategoryUser LIMIT :offset,:perPage";
+            $perPage = self::$perPage;
+            $query = "SELECT * FROM courseCategoryUser LIMIT :offset,$perPage";
             $stmt = $this->con->prepare($query);
-            $stmt->execute([
-                "offset"=>$offset,
-                "perPage"=>self::$perPage
-            ]);
-            $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            $courses = [];
-            if($rows){
-                foreach($rows as $row){
-                    $courses[] = $this->mapRowToCourse($row);
+            $stmt->bindParam(":offset",$offset,\PDO::PARAM_INT);
+            var_dump($stmt);
+
+            if($stmt->execute()){
+                $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                $courses = [];
+                if($rows){
+                    foreach($rows as $row){
+                        $courses[] = $this->mapRowToCourse($row);
+                    }
+                    return $courses;
                 }
-                return $courses;
-            }
-            return NULL;
+                return NULL;
+                
+            }else return false;   
         }
     }
