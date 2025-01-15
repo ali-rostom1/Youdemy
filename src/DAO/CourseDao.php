@@ -11,6 +11,7 @@
 
     class CourseDAO{
         private \PDO $con;
+        public static $perPage = 4;
 
         public function __construct(){
             $this->con = Database::getInstance()->getConnection();
@@ -131,5 +132,51 @@
         { 
             $stmt = $this->con->prepare("DELETE FROM Courses WHERE course_id = :id"); 
             return $stmt->execute(['id' => $id]); 
+        }
+        //other needed function
+        public function getAllVideoCourses() : array
+        {
+            $query = "SELECT * FROM courseCategoryUser where type= 'Video' ";
+            $stmt = $this->con->query($query);
+            $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $courses = [];
+
+            foreach($rows as $row){
+                $courses[] = $this->mapRowToCourse($row);
+            }
+            return $courses;
+        }
+        public function getVideoCoursesCount() : int
+        {
+            $query = "SELECT count(*) as TOTAL FROM courses where type ='Video'";
+            $stmt = $this->con->query($query);
+            $count = $stmt->fetch(\PDO::FETCH_ASSOC);
+            return isset($count["TOTAL"]) ? $count["TOTAL"] : NULL;
+        }
+        public function getDocumentCoursesCount() : int
+        {
+            $query = "SELECT count(*) as TOTAL FROM courses where type ='Document'";
+            $stmt = $this->con->query($query);
+            $count = $stmt->fetch(\PDO::FETCH_ASSOC);
+            return isset($count["TOTAL"]) ? $count["TOTAL"] : NULL;
+        }
+        public function getCoursesLimit($page) : ?array
+        {
+            $offset = ($page-1) * self::$perPage;
+            $query = "SELECT * FROM courseCategoryUser LIMIT :offset,:perPage";
+            $stmt = $this->con->prepare($query);
+            $stmt->execute([
+                "offset"=>$offset,
+                "perPage"=>self::$perPage
+            ]);
+            $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $courses = [];
+            if($rows){
+                foreach($rows as $row){
+                    $courses[] = $this->mapRowToCourse($row);
+                }
+                return $courses;
+            }
+            return NULL;
         }
     }

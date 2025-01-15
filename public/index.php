@@ -25,8 +25,8 @@ use App\Router;
     $router->add("/",function() use ($courseController){
         $courseController->index();
     });
-    $router->add("/login",function(){
-        echo "login";
+    $router->add("/catalogue",function() use ($courseController){
+        $courseController->catalogue();
     });
     
     $requestedURI = $_SERVER["REQUEST_URI"];

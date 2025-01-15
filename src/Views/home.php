@@ -33,9 +33,9 @@
                     <div class="relative">
                         <input type="search" placeholder="Que souhaitez-vous apprendre ?" class="w-80 pl-4 pr-10 py-3 bg-gray-800/50 border border-gray-700 text-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
-                    <a href="#" class="text-gray-300 hover:text-blue-400 font-medium">Catalogue</a>
-                    <a href="#" class="text-gray-300 hover:text-blue-400 font-medium">Enseigner</a>
-                    <a href="#" class="px-6 py-3 rounded-full text-white bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500">Commencer</a>
+                    <a href="/catalogue" class="text-gray-300 hover:text-blue-400 font-medium">Catalogue</a>
+                    <a href="/register" class="text-gray-300 hover:text-blue-400 font-medium">Enseigner</a>
+                    <a href="/login" class="px-6 py-3 rounded-full text-white bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500">Commencer</a>
                 </div>
             </div>
         </div>
@@ -46,10 +46,10 @@
                 <div class="px-4 pb-4">
                     <input type="search" placeholder="Rechercher..." class="w-full pl-4 pr-10 py-3 bg-gray-800/50 border border-gray-700 text-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <a href="#" class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">Catalogue</a>
-                <a href="#" class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">Enseigner</a>
+                <a href="/catalogue" class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">Catalogue</a>
+                <a href="/register" class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">Enseigner</a>
                 <div class="px-3 pt-4">
-                    <a href="#" class="block px-6 py-3 text-center rounded-full text-white bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500">Commencer</a>
+                    <a href="/login" class="block px-6 py-3 text-center rounded-full text-white bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500">Commencer</a>
                 </div>
             </div>
         </div>

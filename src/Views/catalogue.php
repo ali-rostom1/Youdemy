@@ -81,9 +81,9 @@
                     <option>Avancé</option>
                 </select>
                 <select class="bg-gray-800/50 border border-gray-700 text-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option>Prix</option>
-                    <option>Gratuit</option>
-                    <option>Payant</option>
+                    <option>Type de contenu</option>
+                    <option>Vidéo</option>
+                    <option>Document</option>
                 </select>
             </div>
         </div>
@@ -108,14 +108,12 @@
                 <div class="bg-gray-800/50 rounded-lg p-6 border border-gray-700">
                     <h3 class="text-lg font-semibold text-white mb-4">Catégories</h3>
                     <div class="space-y-3">
+                        <?php foreach($categories as $category) :?>
                         <label class="flex items-center text-gray-300">
-                            <input type="checkbox" class="form-checkbox rounded text-blue-500 bg-gray-700 border-gray-600">
-                            <span class="ml-2">Développement Web (45)</span>
+                            <input type="checkbox" value="<?php echo $category->id ?>" class="form-checkbox rounded text-blue-500 bg-gray-700 border-gray-600">
+                            <span class="ml-2"><?php echo $category->name.'('.$category->course_count.')' ?></span>
                         </label>
-                        <label class="flex items-center text-gray-300">
-                            <input type="checkbox" class="form-checkbox rounded text-blue-500 bg-gray-700 border-gray-600">
-                            <span class="ml-2">Design UX/UI (32)</span>
-                        </label>
+                        <?php endforeach; ?>
                         <!-- Add more categories -->
                     </div>
                 </div>
@@ -124,29 +122,26 @@
                 <div class="bg-gray-800/50 rounded-lg p-6 border border-gray-700">
                     <h3 class="text-lg font-semibold text-white mb-4">Tags populaires</h3>
                     <div class="flex flex-wrap gap-2">
+                        <?php foreach($tags as $tag) : ?>
                         <button class="px-3 py-1 rounded-full text-sm bg-gray-700 text-gray-300 hover:bg-gray-600">
-                            JavaScript
+                            <?php echo $tag->name; ?>
                         </button>
-                        <button class="px-3 py-1 rounded-full text-sm bg-gray-700 text-gray-300 hover:bg-gray-600">
-                            Python
-                        </button>
-                        <!-- Add more tags -->
+                        <?php endforeach; ?>
                     </div>
                 </div>
 
-                <!-- Duration -->
+                <!-- Content Type Filter -->
                 <div class="bg-gray-800/50 rounded-lg p-6 border border-gray-700">
-                    <h3 class="text-lg font-semibold text-white mb-4">Durée</h3>
+                    <h3 class="text-lg font-semibold text-white mb-4">Type de contenu</h3>
                     <div class="space-y-3">
                         <label class="flex items-center text-gray-300">
-                            <input type="radio" name="duration" class="form-radio text-blue-500 bg-gray-700 border-gray-600">
-                            <span class="ml-2">0-2 heures</span>
+                            <input type="checkbox" class="form-checkbox rounded text-blue-500 bg-gray-700 border-gray-600">
+                            <span class="ml-2">Vidéo (<?php echo $videoCoursesCount ?>)</span>
                         </label>
                         <label class="flex items-center text-gray-300">
-                            <input type="radio" name="duration" class="form-radio text-blue-500 bg-gray-700 border-gray-600">
-                            <span class="ml-2">3-6 heures</span>
+                            <input type="checkbox" class="form-checkbox rounded text-blue-500 bg-gray-700 border-gray-600">
+                            <span class="ml-2">Document (<?php echo $documentCoursesCount ?>)</span>
                         </label>
-                        <!-- Add more durations -->
                     </div>
                 </div>
             </div>
@@ -167,28 +162,42 @@
                 <!-- Course Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Course Card -->
+                     <?php foreach($courses as $course) : ?>
                     <div class="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:shadow-lg hover:shadow-blue-500/10 transition-shadow">
-                        <img src="/api/placeholder/400/200" alt="Course thumbnail" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <div class="flex items-center gap-2 mb-3">
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-blue-500/20 text-blue-300">
-                                    Développement
-                                </span>
-                                <span class="px-2 py-1 rounded text-xs font-medium bg-green-500/20 text-green-300">
-                                    Débutant
+                                <?php foreach($course->tags as $index=>$tag) : ?>
+                                    <?php if($index<3) : ?>
+                                        <?php if($index%2 === 0) :?>
+                                        <span class="px-2 py-1 rounded text-xs font-medium bg-blue-500/20 text-blue-300">
+                                            <?php echo $tag->name; ?>
+                                        </span>
+                                        <?php else :?>
+                                            <span class="px-2 py-1 rounded text-xs font-medium bg-blue-500/20 text-green-300">
+                                            <?php echo $tag->name; ?>
+                                        </span>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                <?php endforeach;?>
+                                <span class="px-2 py-1 rounded text-xs font-medium bg-purple-500/20 text-purple-300">
+                                            <?php echo $course->type; ?>
                                 </span>
                             </div>
-                            <h3 class="text-lg font-bold text-white mb-2">Introduction au développement web moderne</h3>
-                            <p class="text-gray-400 text-sm mb-4">Apprenez les fondamentaux du développement web avec HTML, CSS et JavaScript</p>
+                            <h3 class="text-lg font-bold text-white mb-2"><?php echo $course->title; ?></h3>
+                            <p class="text-gray-400 text-sm mb-4"><?php echo $course->description; ?></p>
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
-                                    <img src="/api/placeholder/32/32" alt="Author" class="w-8 h-8 rounded-full">
-                                    <span class="ml-2 text-sm text-gray-400">Marie Martin</span>
+                                    <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium">
+                                        <?php 
+                                            echo $course->teacher->getLogoName();
+                                        ?>
+                                    </div>
+                                    <span class="ml-2 text-sm text-gray-400"><?php echo $course->teacher->username ?></span>
                                 </div>
-                                <span class="text-xl font-bold text-white">29€</span>
                             </div>
                         </div>
                     </div>
+                    <?php endforeach; ?>
                     <!-- Repeat course cards -->
                 </div>
 
@@ -241,3 +250,6 @@
     </script>
 </body>
 </html>
+
+    <?php 
+        dd($courses);

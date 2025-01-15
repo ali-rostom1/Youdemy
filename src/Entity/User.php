@@ -30,4 +30,10 @@
                 $this->$attr = $value;
             }
         }
+        public function getLogoName(){
+            return  strtoupper(implode("",array_map(function($word){
+                return $word[0];
+            },explode(" ",$this->username))));
+           
+        }
     }
