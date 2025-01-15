@@ -115,3 +115,13 @@ INSERT INTO Enrollment (user_id, course_id, enrollment_date) VALUES
 (4, 6),
 (2, 7),
 (3, 8);
+
+CREATE VIEW categoryCount AS
+SELECT 
+    ct.category_id,
+    ct.name AS category_name,
+    ct.description AS category_description,
+    COUNT(c.course_id) AS course_count
+FROM Categories ct
+LEFT JOIN Courses c ON ct.category_id = c.category_id
+GROUP BY ct.category_id, ct.name, ct.description;
