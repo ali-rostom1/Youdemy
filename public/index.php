@@ -35,6 +35,6 @@ use App\Router;
     //DISPATCHING REQUEST BASED ON ROUTES ADDED
     $router->dispatch($requestedURI);
 
-    
 
+    
 
