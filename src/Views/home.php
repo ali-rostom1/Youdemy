@@ -114,7 +114,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-white mb-2"><?php echo $category->name ?></h3>
                     <p class="text-gray-400"><?php echo $category->description ?></p>
-                    <span class="mt-4 inline-block text-blue-400 font-medium">120 cours →</span>
+                    <span class="mt-4 inline-block text-blue-400 font-medium"><?php echo $category->course_count ?> cours →</span>
                 </div>
                 <?php endforeach; ?>
                 
@@ -128,21 +128,21 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-extrabold text-white text-center mb-12">Cours les plus populaires</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <?php foreach($courses as $course): ?>
                 <div class="bg-gray-800 rounded-2xl overflow-hidden shadow-lg border border-gray-700 hover:shadow-2xl hover:shadow-blue-500/10 transition-shadow duration-300">
-                    <img src="/api/placeholder/400/250" alt="Course thumbnail" class="w-full object-cover">
                     <div class="p-8">
-                        <span class="px-4 py-2 rounded-full text-sm font-medium bg-blue-500/20 text-blue-300">Développement</span>
-                        <h3 class="text-xl font-bold mt-4 mb-2 text-white">Formation Complète PHP & MySQL</h3>
-                        <p class="text-gray-400 mb-4">De débutant à développeur backend professionnel</p>
+                        <span class="px-4 py-2 rounded-full text-sm font-medium bg-blue-500/20 text-blue-300"><?php echo $course->category->name ?></span>
+                        <h3 class="text-xl font-bold mt-4 mb-2 text-white"><?php echo $course->title ?></h3>
+                        <p class="text-gray-400 mb-4"><?php echo $course->description ?></p>
                         <div class="flex items-center justify-between mt-6">
                             <div class="flex items-center">
-                                <img src="/api/placeholder/40/40" alt="Author" class="w-10 h-10 rounded-full">
-                                <span class="ml-3 text-sm text-gray-400">Par Jean Dupont</span>
+                                <span class="ml-3 text-sm text-gray-400">Par <?php echo $course->teacher->username ?></span>
                             </div>
                             <span class="text-2xl font-bold text-white">49€</span>
                         </div>
                     </div>
                 </div>
+                <?php endforeach; ?>
                 <!-- Repeat for other courses -->
             </div>
         </div>

@@ -4,7 +4,7 @@ namespace App\Service;
 use App\DAO\UserDAO;
 use App\Entity\User;
 
-class Authentication {
+class Authentification {
 
     private UserDAO $userDAO;
 
@@ -62,5 +62,13 @@ class Authentication {
             return $this->userDAO->getUserById($_SESSION['user_id']);
         }
         return null;
+    }
+    public function isAdmin() : bool
+    {
+        if($this->isAuthenticated()){
+            $currentUser = $this->getCurrentUser();
+            return $currentUser->role === "admin";
+        }
+        return false;
     }
 }
