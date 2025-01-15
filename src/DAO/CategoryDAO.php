@@ -13,11 +13,11 @@ class CategoryDAO {
     }
 
     private function mapRowToCategory(array $row): Category {
-        return new Category($row['name'], $row['description'],$row['category_id']);
+        return new Category($row['name'], $row['description'],$row['category_id'],$row["course_count"]);
     }
     
     public function getAllCategories(): array {
-        $query = "SELECT * FROM Categories";
+        $query = "SELECT * FROM categoryCount";
         $stmt = $this->con->query($query);
         $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -29,7 +29,7 @@ class CategoryDAO {
     }
 
     public function getCategoryById(int $id): ?Category {
-        $query = "SELECT * FROM Categories WHERE category_id = :category_id";
+        $query = "SELECT * FROM categoryCount WHERE category_id = :category_id";
         $stmt = $this->con->prepare($query);
         $stmt->bindParam(':category_id', $id, \PDO::PARAM_INT);
         $stmt->execute();
