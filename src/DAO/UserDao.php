@@ -3,6 +3,7 @@ namespace App\DAO;
 
 use App\Database\Database;
 use App\Entity\User;
+use PDOException;
 
 class UserDAO {
     private \PDO $con;
@@ -54,14 +55,18 @@ class UserDAO {
 
     public function saveUser(User $user): bool 
     {
-        $stmt = $this->con->prepare("INSERT INTO Users (username, password, email, role, status) VALUES (:username, :password, :email, :role, :status)");
-        return $stmt->execute([
-            'username' => $user->username,
-            'password' => $user->password,
-            'email' => $user->email,
-            'role' => $user->role,
-            'status' => $user->status
-        ]);
+        try{
+            $stmt = $this->con->prepare("INSERT INTO Users (username, password, email, role, status) VALUES (:username, :password, :email, :role, :status)");
+            return $stmt->execute([
+                'username' => $user->username,
+                'password' => $user->password,
+                'email' => $user->email,
+                'role' => $user->role,
+                'status' => $user->status
+            ]);
+        }catch(PDOException){
+            return false;
+        }
     }
 
     public function updateUser(User $user): bool {
@@ -123,5 +128,59 @@ class UserDAO {
         $stmt = $this->con->query($query);
         return $stmt->fetch(\PDO::FETCH_ASSOC)["TOTAL"];
 
+    }
+    public function getAllUsersPagination($page,$perPage,$role) : array
+    {
+        $offset = ($page-1) * $perPage;
+        
+        $query = "SELECT * FROM users WHERE role != 'admin' ";
+        if($role)
+        {
+            $query .= "AND role = :role ";
+        }
+        $query .= "LIMIT :offset,:perPage ";
+        $stmt = $this->con->prepare($query);
+        if($role)
+        {
+            $stmt->bindParam(":role",$role,\PDO::PARAM_STR);
+        }
+        $stmt->bindParam(":perPage",$perPage,\PDO::PARAM_INT);
+        $stmt->bindParam(":offset",$offset,\PDO::PARAM_INT);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $users = [];
+        
+        foreach($rows as $row){
+            $users[] = $this->mapRowToUser($row);
+        }
+        return $users;
+    }
+    public function getTotalUsers($role) : int
+    {
+        $query = "SELECT COUNT(*) AS TOTAL FROM users WHERE role != 'admin' ";
+        if($role){
+            $query .= "AND role = :role";
+        }
+        $stmt = $this->con->prepare($query);
+        if($role){
+            $stmt->bindParam(":role",$role,\PDO::PARAM_STR);
+        }
+        $stmt->execute();
+        return $stmt->fetch(\PDO::FETCH_ASSOC)["TOTAL"];
+    }
+    public function searchUsers($term) : array
+    {
+        $term = '%' . $term . '%';
+        $query = "SELECT * FROM users WHERE username like :term";
+        $stmt = $this->con->prepare($query);
+        $stmt->bindParam(":term",$term,\PDO::PARAM_STR);
+        $stmt->execute();
+        
+        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $users = [];
+        foreach($rows as $row){
+            $users[] = $this->mapRowToUser($row);
+        }
+        return $users;
     }
 }

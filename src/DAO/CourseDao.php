@@ -188,4 +188,58 @@
             $result = $this->con->query($query);
             return $result->fetch(\PDO::FETCH_ASSOC)["TOTAL"];
         }
+        public function getAllCoursesPagination($page,$perPage,$category) : array
+        {
+            $offset = ($page-1) * $perPage;
+            
+            $query = "SELECT * FROM courseCategoryUser ";
+            if($category)
+            {
+                $query .= "WHERE category_id = :category_id ";
+            }
+            $query .= "LIMIT :offset,:perPage ";
+            $stmt = $this->con->prepare($query);
+            if($category)
+            {
+                $stmt->bindParam(":category_id",$category,\PDO::PARAM_INT);
+            }
+            $stmt->bindParam(":perPage",$perPage,\PDO::PARAM_INT);
+            $stmt->bindParam(":offset",$offset,\PDO::PARAM_INT);
+            $stmt->execute();
+            $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $courses = [];
+            
+            foreach($rows as $row){
+                $courses[] = $this->mapRowToCourse($row);
+            }
+            return $courses;
+        }
+        public function getTotalCoursesCategory($category) : int
+        {
+            $query = "SELECT COUNT(*) AS TOTAL FROM courseCategoryUser ";
+            if($category){
+                $query .= "WHERE category_id = :category_id";
+            }
+            $stmt = $this->con->prepare($query);
+            if($category){
+                $stmt->bindParam(":category_id",$category,\PDO::PARAM_INT);
+            }
+            $stmt->execute();
+            return $stmt->fetch(\PDO::FETCH_ASSOC)["TOTAL"];
+        }
+        public function searchCourses($term) : array
+        {
+            $term = '%' . $term . '%';
+            $query = "SELECT * FROM courseCategoryUser WHERE title like :term";
+            $stmt = $this->con->prepare($query);
+            $stmt->bindParam(":term",$term,\PDO::PARAM_STR);
+            $stmt->execute();
+            
+            $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $courses = [];
+            foreach($rows as $row){
+                $courses[] = $this->mapRowToCourse($row);
+            }
+            return $courses;
+        }
     }

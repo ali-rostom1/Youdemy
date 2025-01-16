@@ -60,4 +60,44 @@ class CategoryDAO {
         $stmt = $this->con->prepare("DELETE FROM Categories WHERE category_id = :category_id");
         return $stmt->execute(['category_id' => $id]);
     }
+    public function getAllCategoryPagination($page,$perPage) : array
+    {
+        $offset = ($page-1) * $perPage;
+        
+        $query = "SELECT * FROM categoryCount LIMIT :offset,:perPage ";
+        
+        $stmt = $this->con->prepare($query);
+
+        $stmt->bindParam(":perPage",$perPage,\PDO::PARAM_INT);
+        $stmt->bindParam(":offset",$offset,\PDO::PARAM_INT);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $categories = [];
+        
+        foreach($rows as $row){
+            $categories[] = $this->mapRowToCategory($row);
+        }
+        return $categories;
+    }
+    public function getTotalCategory() : int
+    {
+        $query = "SELECT COUNT(*) AS TOTAL FROM categoryCount";
+        $stmt = $this->con->query($query);
+        return $stmt->fetch(\PDO::FETCH_ASSOC)["TOTAL"];
+    }
+    public function searchCategory($term) : array
+    {
+        $term = '%' . $term . '%';
+        $query = "SELECT * FROM categoryCount WHERE name like :term";
+        $stmt = $this->con->prepare($query);
+        $stmt->bindParam(":term",$term,\PDO::PARAM_STR);
+        $stmt->execute();
+        
+        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $categories = [];
+        foreach($rows as $row){
+            $categories[] = $this->mapRowToCategory($row);
+        }
+        return $categories;
+    }
 }

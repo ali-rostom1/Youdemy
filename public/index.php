@@ -42,6 +42,9 @@
     $router->add("/login",function () use ($authController){
         $authController->login();
     });
+    $router->add("/register",function () use ($authController){
+        $authController->register();
+    });
     $router->add("/logout",function () use ($authController){
         $authController->logout();
     });
@@ -50,6 +53,12 @@
     });
     $router->add("/admin/users",function() use ($adminController){
         $adminController->users();
+    });
+    $router->add("/admin/courses",function() use ($adminController){
+        $adminController->courses();
+    });
+    $router->add("/admin/category",function() use ($adminController){
+        $adminController->category();
     });
 
 

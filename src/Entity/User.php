@@ -4,13 +4,13 @@
 
     class User{
 
-        private int $id; 
+        private ?int $id; 
         private string $username; 
-        private string $password; 
+        private ?string $password; 
         private string $email; 
         private string $role; 
         private string $status;
-        private \DateTime $createdAt;
+        private ?\DateTime $createdAt;
 
         public function __construct($id,$username,$password,$email,$role,$status,\DateTime $createdAt=NULL)
         {

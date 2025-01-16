@@ -82,9 +82,13 @@
                         <p class="text-gray-400 mb-4"><?php echo $course->description ?></p>
                         <div class="flex items-center justify-between mt-6">
                             <div class="flex items-center">
-                                <span class="ml-3 text-sm text-gray-400">Par <?php echo $course->teacher->username ?></span>
+                                <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium">
+                                    <?php 
+                                        echo $course->teacher->getLogoName();
+                                    ?>
+                                </div>
+                                <span class="ml-2 text-sm text-gray-400"><?php echo $course->teacher->username ?></span>
                             </div>
-                            <span class="text-2xl font-bold text-white">49€</span>
                         </div>
                     </div>
                 </div>

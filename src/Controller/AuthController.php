@@ -56,10 +56,25 @@
                 exit;
             }
         }
-        public function logout()
+        public function logout() : void
         {
             $this->auth->logout();
             header("location: /authentification");
             exit;
+        }
+        public function register() : void
+        {
+            if($this->auth->isAuthenticated()){
+                $this->index();
+            }
+            $username = $_POST["registerFname"]. " " . $_POST["registerLname"];
+            $email = $_POST["registerEmail"];
+            $password = $_POST["registerPassword"];
+            $role = $_POST["user-type"];
+            if(!$this->auth->register($username,$password,$email,$role)){
+                header("location: /authentification?error=" . urlencode("Invalid inputs!"));
+                exit;
+            }
+
         }
     }

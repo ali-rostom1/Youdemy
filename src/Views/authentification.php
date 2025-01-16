@@ -1,7 +1,7 @@
 <?php 
     include "../src/Views/components/header.php";
 ?>
-
+    
     <!-- Background Pattern -->
     <div class="fixed inset-0 -z-10 overflow-hidden">
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(59,130,246,0.1),rgba(59,130,246,0)_50%)]"></div>
@@ -62,8 +62,8 @@
                 </div>
 
                 <!-- Register Form -->
-                <div id="register-form" action="/register" class="hidden space-y-6">
-                    <form class="space-y-4">
+                <div id="register-form" class="hidden space-y-6">
+                    <form class="space-y-4" action="/register" method="POST">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label for="register-firstname" class="text-sm font-medium text-gray-300">Prénom</label>
