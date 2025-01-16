@@ -8,7 +8,7 @@ CREATE TABLE Users(
     password VARCHAR(255) NOT NULL, 
     email VARCHAR(100) NOT NULL, 
     role ENUM('student', 'teacher','admin') NOT NULL, 
-    status ENUM('active', 'suspended',"pending") DEFAULT 'active' 
+    status ENUM('active','banned', 'suspended',"pending") DEFAULT 'active' 
 );
 
 

@@ -98,4 +98,18 @@ class UserDAO {
         }
         return false;
     }
+    public function getAllStudentsCount(): int
+    { 
+        $query = "SELECT count(*) as TOTAL FROM users WHERE role = 'student' and status !='banned'";
+        $stmt = $this->con->query($query);
+        return $stmt->fetch(\PDO::FETCH_ASSOC)["TOTAL"];
+
+    }
+    public function getAllTeachersCount(): int
+    { 
+        $query = "SELECT count(*) as TOTAL FROM users WHERE role = 'teacher' and status != 'pending' and status != 'banned'";
+        $stmt = $this->con->query($query);
+        return $stmt->fetch(\PDO::FETCH_ASSOC)["TOTAL"];
+
+    }
 }

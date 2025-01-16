@@ -31,7 +31,7 @@
                             header("location: /");
                             break;
                         case "admin":
-                            header("location: /admin");
+                            header("location: /admin/dashboard");
                             break;
                         default:
                             header("/authentification");
@@ -49,7 +49,7 @@
             if(!$this->auth->isAuthenticated()){
                 include "../src/Views/authentification.php";
             }else if($this->auth->isAdmin()){
-                header("location: /admin");
+                header("location: /admin/dashboard");
                 exit;
             }else{
                 header("location: /catalogue");

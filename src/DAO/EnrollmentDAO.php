@@ -54,7 +54,7 @@ class EnrollmentDAO {
     }
 
     public function saveEnrollment(Enrollment $enrollment): bool {
-        $stmt = $this->con->prepare("INSERT INTO Enrollments (user_id, course_id, enrollment_date) VALUES (:user_id, :course_id, :enrollment_date)");
+        $stmt = $this->con->prepare("INSERT INTO Enrollment (user_id, course_id, enrollment_date) VALUES (:user_id, :course_id, :enrollment_date)");
         return $stmt->execute([
             'user_id' => $enrollment->user->getId(),
             'course_id' => $enrollment->course->getId(),
@@ -63,7 +63,7 @@ class EnrollmentDAO {
     }
 
     public function updateEnrollment(Enrollment $enrollment): bool {
-        $stmt = $this->con->prepare("UPDATE Enrollments SET user_id = :user_id, course_id = :course_id, enrollment_date = :enrollment_date WHERE enrollment_id = :enrollment_id");
+        $stmt = $this->con->prepare("UPDATE Enrollment SET user_id = :user_id, course_id = :course_id, enrollment_date = :enrollment_date WHERE enrollment_id = :enrollment_id");
         return $stmt->execute([
             'enrollment_id' => $enrollment->id,
             'user_id' => $enrollment->user->getId(),
@@ -73,7 +73,13 @@ class EnrollmentDAO {
     }
 
     public function deleteEnrollment(int $id): bool {
-        $stmt = $this->con->prepare("DELETE FROM Enrollments WHERE enrollment_id = :enrollment_id");
+        $stmt = $this->con->prepare("DELETE FROM Enrollment WHERE enrollment_id = :enrollment_id");
         return $stmt->execute(['enrollment_id' => $id]);
+    }
+    public function getTotalEnrollments() : int
+    {
+        $query = "SELECT COUNT(*) AS TOTAL FROM Enrollment";
+        $result = $this->con->query($query);
+        return $result->fetch(\PDO::FETCH_ASSOC)["TOTAL"];
     }
 }

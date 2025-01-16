@@ -1,5 +1,6 @@
 <?php
-
+    //NAMESPACES NEEDED
+    use App\Controller\AdminController;
     use App\Controller\AuthController;
     use App\Controller\CourseController;
     use App\DAO\CategoryDAO;
@@ -11,17 +12,22 @@
     use App\Router;
     use Dotenv\Dotenv;
 
-    require_once "../vendor/autoload.php";
+    require_once "../vendor/autoload.php"; //PSR-4 AUTOLOADER
     
     //LOADING ENVIROMENT VARIABLES    
     $dotenv = Dotenv::createImmutable(__DIR__ . "/../");
     $dotenv->load();
 
-
+    //INITIALIZING ROUTER
     $router = new Router();
 
+    //CALLING CONTROLLERS
     $courseController = new CourseController();
     $authController = new AuthController();
+    $adminController = new AdminController();
+
+
+
 
     //ADDING ROUTES
     $router->add("/",function() use ($courseController){
@@ -39,11 +45,14 @@
     $router->add("/logout",function () use ($authController){
         $authController->logout();
     });
-    $router->add("/test",function(){
-        session_start();
+    $router->add("/admin/dashboard",function() use ($adminController){
+        $adminController->index();
     });
+
+
     
-    $requestedURI = $_SERVER["REQUEST_URI"];
+    
+    $requestedURI = $_SERVER["REQUEST_URI"];// GETTING THE REQUEST URI
     $requestedURI = parse_url($requestedURI,PHP_URL_PATH); // removing the get queries
 
     //DISPATCHING REQUEST BASED ON ROUTES ADDED

@@ -182,4 +182,10 @@
                 
             }else return false;   
         }
+        public function getTotalCourses() : int
+        {
+            $query = "SELECT count(*) AS TOTAL FROM courses";
+            $result = $this->con->query($query);
+            return $result->fetch(\PDO::FETCH_ASSOC)["TOTAL"];
+        }
     }
