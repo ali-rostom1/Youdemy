@@ -55,5 +55,11 @@
                 header("location: /catalogue");
                 exit;
             }
-        } 
+        }
+        public function logout()
+        {
+            $this->auth->logout();
+            header("location: /authentification");
+            exit;
+        }
     }

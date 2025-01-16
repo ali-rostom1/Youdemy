@@ -72,15 +72,15 @@ class Authentification {
     }
     public function isAdmin() : bool
     {
-        return $this->hasRole("Admin");
+        return $this->hasRole("admin");
     }
     public function isStudent() : bool
     {
-        return $this->hasRole("Student");
+        return $this->hasRole("student");
     }
     public function isTeacher() : bool
     {
-        return $this->hasRole("Teacher");
+        return $this->hasRole("teacher");
     }
 
 }

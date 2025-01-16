@@ -29,6 +29,7 @@
             }
             $categories = array_slice($this->categoryDAO->getAllCategories(), 0, 3); 
             $courses = array_slice($this->courseDAO->getAllCourses(), 0, 3);
+            $isLogged = $this->auth->isAuthenticated();
             include "../src/Views/home.php";
         }
         public function catalogue() : void
@@ -36,13 +37,14 @@
             if($this->auth->isAdmin())
             {
                 header("location: /admin/dashboard");
-                return;
+                exit;
             }
             $categories = $this->categoryDAO->getAllCategories();
             $courses = $this->courseDAO->getAllCourses();
             $tags = $this->tagDAO->getAllTags();
             $documentCoursesCount = $this->courseDAO->getDocumentCoursesCount();
             $videoCoursesCount = $this->courseDAO->getVideoCoursesCount();
+            $isLogged = $this->auth->isAuthenticated();
             include "../src/Views/catalogue.php";
         }
     }

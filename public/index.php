@@ -36,8 +36,11 @@
     $router->add("/login",function () use ($authController){
         $authController->login();
     });
+    $router->add("/logout",function () use ($authController){
+        $authController->logout();
+    });
     $router->add("/test",function(){
-        $courseDAO = new CourseDAO();
+        session_start();
     });
     
     $requestedURI = $_SERVER["REQUEST_URI"];

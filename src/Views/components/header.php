@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalogue des cours - Youdemy</title>
+    <title>Youdemy</title>
+    <link rel="icon" type="image/svg+xml" href="assets/images/icons/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="stylesheet" href="assets/css/output.css">
     <link rel="stylesheet" href="assets/css/input.css">
+    
 </head>
 <body class="bg-gray-900">
     <!-- Navigation (same as homepage) -->
@@ -31,7 +35,13 @@
                         <input type="search" placeholder="Que souhaitez-vous apprendre ?" class="w-80 pl-4 pr-10 py-3 bg-gray-800/50 border border-gray-700 text-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <a href="/catalogue" class="text-gray-300 hover:text-blue-400 font-medium">Catalogue</a>
-                    <a href="/authentification" class="px-6 py-3 rounded-full text-white bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500">Commencer</a>
+                    <?php if(!isset($isLogged) || !$isLogged) echo '<a href="/authentification" class="px-6 py-3 rounded-full text-white bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500">Commencer</a>'; ?>
+                    <?php if(isset($isLogged) && $isLogged) {
+                            echo '<a href="/my_courses" class="text-gray-300 hover:text-blue-400 font-medium">My Courses</a>';
+                            echo '<a href="/logout" class="px-6 py-3 rounded-full text-white bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500">logout</a>'; 
+                            }
+                        ?>
+
                 </div>
             </div>
         </div>
