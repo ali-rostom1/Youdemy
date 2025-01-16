@@ -4,14 +4,15 @@
 
     class User{
 
-        private $id; 
-        private $username; 
-        private $password; 
-        private $email; 
-        private $role; 
-        private $status;
+        private int $id; 
+        private string $username; 
+        private string $password; 
+        private string $email; 
+        private string $role; 
+        private string $status;
+        private \DateTime $createdAt;
 
-        public function __construct($id,$username,$password,$email,$role,$status)
+        public function __construct($id,$username,$password,$email,$role,$status,\DateTime $createdAt=NULL)
         {
             $this->id = $id; 
             $this->username = $username; 
@@ -19,6 +20,7 @@
             $this->email = $email; 
             $this->role = $role; 
             $this->status = $status;
+            $this->createdAt = $createdAt;
         }
         public function __get($attr){
             if(property_exists($this,$attr)){
@@ -30,7 +32,8 @@
                 $this->$attr = $value;
             }
         }
-        public function getLogoName(){
+        public function getLogoName() : string
+        {
             return  strtoupper(implode("",array_map(function($word){
                 return $word[0];
             },explode(" ",$this->username))));

@@ -48,9 +48,12 @@
     $router->add("/admin/dashboard",function() use ($adminController){
         $adminController->index();
     });
+    $router->add("/admin/users",function() use ($adminController){
+        $adminController->users();
+    });
 
 
-    
+
     
     $requestedURI = $_SERVER["REQUEST_URI"];// GETTING THE REQUEST URI
     $requestedURI = parse_url($requestedURI,PHP_URL_PATH); // removing the get queries

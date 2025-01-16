@@ -39,7 +39,19 @@ use App\DAO\TagDAO;
             $totalEnrollments = $this->enrollmentDAO->getTotalEnrollments();
             include "../src/Views/admin/dashboard.php";
         }
+        public function users(){
+            if(!$this->auth->isAdmin())
+            {
+                header("location: /");
+                exit;
+            }
+            $totalStudents = $this->userDAO->getAllStudentsCount();
+            $totalTeachers = $this->userDAO->getAllTeachersCount();
+            $totalUsers = $totalStudents + $totalTeachers;
+            $allUsers = $this->userDAO->getAllNotAdminUsers();
+            include "../src/Views/admin/users.php";
 
+        }
 
 
     }

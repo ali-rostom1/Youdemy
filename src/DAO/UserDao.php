@@ -20,7 +20,8 @@ class UserDAO {
             $row['password'], 
             $row['email'], 
             $row['role'], 
-            $row['status']
+            $row['status'],
+            new \DateTime($row['created_at'])
         );
     }
 
@@ -89,6 +90,17 @@ class UserDAO {
             return $this->mapRowToUser($row);
         }
         return null;
+    }
+    public function getAllNotAdminUsers(){
+        $query = "SELECT * FROM Users where role !='admin'";
+        $stmt = $this->con->query($query);
+        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        $users = [];
+        foreach ($rows as $row) {
+            $users[] = $this->mapRowToUser($row);
+        }
+        return $users;
     }
 
     public function verifyPassword(string $email, string $password): bool {
