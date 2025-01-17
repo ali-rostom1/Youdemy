@@ -242,4 +242,44 @@
             }
             return $courses;
         }
+        public function getAllCoursesPaginationv2($page,$perPage,$category,$tag,$type) : array
+        {
+            
+            $offset = ($page-1) * $perPage;
+            $query = $tag  ? "SELECT * FROM courseCategoryUserTag WHERE 1=1 " : "SELECT * FROM courseCategoryUser WHERE 1=1 ";
+            if($category){
+                $query .= "AND category_id = :category_id ";
+            }
+            if($tag){
+                $query .= "AND tag_id = :tag_id ";
+            }
+            if($type){
+                $query .="AND type = :type ";
+            }
+            $query.= "LIMIT :offset,:perPage ";
+
+            
+            $stmt = $this->con->prepare($query);
+            if($category){
+                $stmt->bindParam(":category_id",$category,\PDO::PARAM_INT);
+            }
+            if($tag){
+                $stmt->bindParam(":tag_id",$tag,\PDO::PARAM_INT);
+           }
+            if($type){
+                $stmt->bindParam(":type",$type,\PDO::PARAM_STR);
+            }
+            
+            $stmt->bindParam(":offset",$offset,\PDO::PARAM_INT);
+            $stmt->bindParam(":perPage",$perPage,\PDO::PARAM_INT);
+            
+            $stmt->execute();
+            $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $courses = [];
+            foreach($rows as $row)
+            {
+                $courses[] = $this->mapRowToCourse($row);
+            }
+            return $courses;
+        }
     }

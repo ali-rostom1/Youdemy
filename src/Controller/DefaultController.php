@@ -7,7 +7,7 @@
     use App\DAO\TagDAO;
     use App\Service\Authentification;
 
-    class CourseController{
+    class DefaultController{
 
         private CourseDAO $courseDAO;
         private CategoryDAO $categoryDAO;
@@ -39,8 +39,14 @@
                 header("location: /admin/dashboard");
                 exit;
             }
+            $page = isset($_GET["page"]) ? $_GET["page"] : 1;
+            $category = isset($_GET["category"]) ? $_GET["category"] : "";
+            $tag = isset($_GET["tag"]) ? $_GET["tag"] : "";
+            $term = isset($_GET["term"]) ? $_GET["term"] : "";
+            $type = isset($_GET["type"]) ? $_GET["type"] : "";
+            $perPage = 4;
+            $courses = !$term ?  $this->courseDAO->getAllCoursesPaginationv2($page,$perPage,$category,$tag,$type) : $this->courseDAO->searchCourses($term);
             $categories = $this->categoryDAO->getAllCategories();
-            $courses = $this->courseDAO->getAllCourses();
             $tags = $this->tagDAO->getAllTags();
             $documentCoursesCount = $this->courseDAO->getDocumentCoursesCount();
             $videoCoursesCount = $this->courseDAO->getVideoCoursesCount();

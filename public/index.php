@@ -3,7 +3,8 @@
     use App\Controller\AdminController;
     use App\Controller\AuthController;
     use App\Controller\CourseController;
-    use App\DAO\CategoryDAO;
+use App\Controller\DefaultController;
+use App\DAO\CategoryDAO;
     use App\DAO\CourseDAO;
     use App\DAO\EnrollmentDAO;
     use App\DAO\TagDAO;
@@ -22,7 +23,7 @@
     $router = new Router();
 
     //CALLING CONTROLLERS
-    $courseController = new CourseController();
+    $defaultController = new DefaultController();
     $authController = new AuthController();
     $adminController = new AdminController();
 
@@ -30,11 +31,11 @@
 
 
     //ADDING ROUTES
-    $router->add("/",function() use ($courseController){
-        $courseController->index();
+    $router->add("/",function() use ($defaultController){
+        $defaultController->index();
     });
-    $router->add("/catalogue",function() use ($courseController){
-        $courseController->catalogue();
+    $router->add("/catalogue",function() use ($defaultController){
+        $defaultController->catalogue();
     });
     $router->add("/authentification",function() use ($authController){
         $authController->index();

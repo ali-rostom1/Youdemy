@@ -116,7 +116,8 @@ INSERT INTO Enrollment (user_id, course_id, enrollment_date) VALUES
 (2, 7),
 (3, 8);
 
-select * from categoryCount;
+
+
 CREATE VIEW categoryCount AS
 SELECT 
     ct.category_id,
@@ -126,3 +127,21 @@ SELECT
 FROM Categories ct
 LEFT JOIN Courses c ON ct.category_id = c.category_id
 GROUP BY ct.category_id, ct.name, ct.description;
+create view courseCategoryUserTag AS 
+SELECT 
+	c.*,
+    ct.name AS category_name,
+    ct.description AS category_description,
+    u.username AS teacher_name, 
+    u.email AS teacher_email,
+    u.status AS status,
+    t.tag_id,
+    t.name AS tag_name
+    
+FROM Courses c 
+JOIN Categories ct ON c.category_id = ct.category_id 
+JOIN Users u ON c.teacher_id = u.user_id
+JOIN course_tags ctt ON ctt.course_id = c.course_id
+JOIN tags t on ctt.tag_id = t.tag_id;
+    
+select * from courseCategoryUserTag;
