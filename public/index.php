@@ -61,6 +61,9 @@ use App\DAO\CategoryDAO;
     $router->add("/admin/category",function() use ($adminController){
         $adminController->category();
     });
+    $router->add("/course/signup",function() use ($defaultController){
+        $defaultController->courseSignUp();
+    });
 
 
 

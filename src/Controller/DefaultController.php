@@ -4,8 +4,11 @@
 
     use App\DAO\CategoryDAO;
     use App\DAO\CourseDAO;
+    use App\DAO\EnrollmentDAO;
     use App\DAO\TagDAO;
+    use App\Entity\Enrollment;
     use App\Service\Authentification;
+    
 
     class DefaultController{
 
@@ -13,6 +16,7 @@
         private CategoryDAO $categoryDAO;
         private Authentification $auth;
         private TagDAO $tagDAO;
+        private EnrollmentDAO $enrollmentDAO;
 
         public function __construct()
         {
@@ -20,6 +24,7 @@
             $this->categoryDAO = new CategoryDAO();
             $this->auth = new Authentification();
             $this->tagDAO = new TagDAO();
+            $this->enrollmentDAO = new EnrollmentDAO();
         }
         public function index() : void
         {
@@ -59,8 +64,33 @@
             $documentCoursesCount = $this->courseDAO->getDocumentCoursesCount();
             $videoCoursesCount = $this->courseDAO->getVideoCoursesCount();
 
+            $courseDataJson = json_encode($courses);
 
             $isLogged = $this->auth->isAuthenticated();
             include "../src/Views/catalogue.php";
+        }
+        public function courseSignUp() : void
+        {
+            if($this->auth->getCurrentUser() && !$this->auth->isStudent()){
+                header("location: /");
+                exit;
+            }else if(!$this->auth->getCurrentUser())
+            {
+                header("location: /authentification");
+                exit;
+            }
+
+            $id = isset($_GET["id"]) ? $_GET["id"] : 0;
+            $course = $this->courseDAO->getCourseById($id);
+            $user = $this->auth->getCurrentUser();
+            $enrollment = new Enrollment(NULL,$course,$user,new \DateTime());
+            if($this->enrollmentDAO->saveEnrollment($enrollment)){
+                header("location: /catalogue?success");
+                exit;
+            }else{
+                header("location: /catalogue?error");
+                exit;
+            }
+
         }
     }

@@ -4,7 +4,7 @@
 
     class Enrollment{
 
-        private int $id;
+        private ?int $id;
         private Course $course;
         private User $user;
         private \DateTime $enrollmentDate;

@@ -14,7 +14,7 @@
         <div class="flex flex-col md:flex-row gap-4 mb-8">
             <div class="flex-1">
                 <div class="relative">
-                    <input type="search" placeholder="Rechercher un cours..." class="w-full pl-4 pr-10 py-3 bg-gray-800/50 border border-gray-700 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="search" id="search" oninput="searchData()" placeholder="Rechercher un cours..." class="w-full pl-4 pr-10 py-3 bg-gray-800/50 border border-gray-700 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <button class="absolute right-3 top-3 text-gray-400">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -97,10 +97,10 @@
                     </select>
                 </div>
                 <!-- Course Cards -->
-                <div id="coursesData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div id="coursesData" data-courses='<?php echo $courseDataJson; ?>' class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Course Card -->
                      <?php foreach($courses as $course) : ?>
-                    <div class="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:shadow-lg hover:shadow-blue-500/10 transition-shadow">
+                    <div data-value="<?php echo $course->id ?>" class="course-card bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:shadow-lg hover:shadow-blue-500/10 transition-shadow">
                         <div class="p-6">
                             <div class="flex items-center gap-2 mb-3">
                                 <?php foreach($course->tags as $index=>$tag) : ?>
@@ -122,7 +122,6 @@
                             </div>
                             <h3 class="text-lg font-bold text-white mb-2"><?php echo $course->title; ?></h3>
                             <p class="text-gray-400 text-sm mb-4"><?php echo $course->description; ?></p>
-                            <?php echo $course->getContent(); ?>
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
                                     <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium">
@@ -158,13 +157,71 @@
             </div>
         </div>
     </div>
+    <div id="courseModal" class="fixed inset-0 bg-gray-900/80 hidden backdrop-blur-sm" onclick="closeModal()">
+        <div class="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-gray-800 rounded-lg border border-gray-700 p-6" onclick="event.stopPropagation()">
+            <!-- Modal Header with Close Button -->
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-white" id="modalCourseName"></h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Course Details -->
+            <div class="space-y-4">
+                <!-- Tags -->
+                <div class="flex flex-wrap gap-2" id="modalTags">
+                    <!-- Tags will be inserted here -->
+                </div>
+
+                <!-- Category -->
+                <div>
+                    <span class="text-gray-400">Catégorie:</span>
+                    <span class="text-white ml-2" id="modalCategory"></span>
+                </div>
+
+                <!-- Description -->
+                <p class="text-gray-300" id="modalDescription"></p>
+
+                <!-- Type -->
+                <div>
+                    <span class="text-gray-400">Type:</span>
+                    <span class="text-white ml-2" id="modalType"></span>
+                </div>
+
+                <!-- Teacher -->
+                <div>
+                    <span class="text-gray-400">Enseignant:</span>
+                    <span class="text-white ml-2" id="modalTeacher"></span>
+                </div>
+
+                <!-- Sign Up Button -->
+                <button id="signUp" href="#" class="w-full mt-6 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                    S'inscrire au cours
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .modal-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: rgba(59, 130, 246, 0.2);
+            color: rgb(147, 197, 253);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+        }
+    </style>
     <?php include "../src/Views/components/footer.php"; ?>
     <script>
+        //burger Menu
         function toggleMenu() {
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenu.classList.toggle('hidden');
         }
-
         window.addEventListener('resize', () => {
             if (window.innerWidth >= 768) { 
                 const mobileMenu = document.getElementById('mobile-menu');
@@ -173,8 +230,11 @@
                 }
             }
         });
+
+        let courses = <?php echo $courseDataJson ?>;
+
         var selectedTag = null; 
-        $('.tag').on('click', function() { 
+        $(document).on('click', '.tag', function() { 
             selectedTag = $(this).data('value'); 
             fetchData(1); 
         });
@@ -182,15 +242,17 @@
             var category = $('input[name="category"]:checked').val();
             var type = $('input[name="type"]:checked').length === 1 ? $('input[name="type"]:checked').val() : "";
             var tag = selectedTag;
-            console.log(selectedTag);
             $.ajax({ 
                 url: '/catalogue', 
                 type: 'GET', 
                 data: { page: page, category: category ,type: type, tag: tag}, 
-                success: function(data) { 
+                success: function(data) {
+                    courses = JSON.parse($(data).find('#coursesData').attr('data-courses'));
                     $('#coursesData').html($(data).find('#coursesData').html()); 
                     $('#pagination').html($(data).find('#pagination').html());
                     $('#total').html($(data).find('#total').html());
+                    initEventHandlers();
+                    console.log(courses);
                 }, 
                 dataType: 'html'
             }); 
@@ -202,9 +264,13 @@
                     url: '/catalogue', 
                     type: 'GET', 
                     data: { term: term}, 
-                    success: function(data) { 
-                        $('#userData tbody').html($(data).find('#userData tbody').html());
+                    success: function(data) {
+                        courses = JSON.parse($(data).find('#coursesData').attr('data-courses'));
+                        $('#coursesData').html($(data).find('#coursesData').html());
+                        $('#total').html($(data).find('#total').html());
                         $('#pagination').html("");
+                        console.log(courses);
+                        initEventHandlers();
                     }, 
                     dataType: 'html'
                 });
@@ -212,7 +278,66 @@
                 fetchData(1);
             } 
         }
+        
+        function initEventHandlers(){
+            $(document).on('click', '.course-card', function() { 
+                const id = $(this).data('value'); 
+                const course = courses.find(course => course.id == id); 
+                showModal(course); 
+            });
+            $(document).on('click', '#closeModal', function() { 
+                closeModal(); 
+            });
+        }
+        
 
+        function showModal(courseData) {
+            const modal = $('#courseModal');
+            const tagsContainer = $('#modalTags');
+            
+            tagsContainer.empty();
+            
+            
+            courseData.tags.forEach(tag => {
+                const tagElement = $('<span></span>').addClass('modal-tag px-2 py-1 rounded text-xs font-medium bg-gray-200 text-gray-700 mr-2').text(tag);
+                tagsContainer.append(tagElement);
+            });
+            $('#modalCourseName').text(courseData.title);
+            $('#modalCategory').text(courseData.category);
+            $('#modalDescription').text(courseData.description);
+            $('#modalType').text(courseData.type);
+            $('#modalTeacher').text(courseData.teacher);
+            $('#signUp').off("click").on("click",function(){
+                window.location.href="/course/signup?id="+courseData.id;
+            })
+
+            modal.removeClass('hidden');
+
+            $('body').css('overflow', 'hidden');
+        }
+
+        function closeModal() {
+            $('#courseModal').addClass('hidden');
+            $('body').css('overflow', '');
+        }
+
+        initEventHandlers();
+        if(<?php echo isset($_GET["error"]) ? 1 : 0 ?>){
+            Swal.fire({
+                title: 'Error!',
+                text: 'Do you want to continue',
+                icon: 'error',
+                confirmButtonText: 'Cool'
+            })
+        }else if(<?php echo isset($_GET["success"]) ? 1 : 0 ?>)
+        {
+            Swal.fire({
+                title: 'You have Been enrolled to the course',
+                text: 'Do you want to continue',
+                icon: 'success',
+                confirmButtonText: 'Confirm'
+            })
+        }
     </script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 
     namespace App\Entity;
 
-    abstract class Course
+    abstract class Course implements \JsonSerializable
     {
         protected int $id;
         protected string $title;
@@ -35,7 +35,22 @@
                 $this->$attr = $value;
             }
         }
-        abstract public function getContent();
+        abstract public function getContent() : string;
+
+        public function jsonSerialize() : array
+        {
+            return [
+                 'id' => $this->id, 
+                 'title' => $this->title, 
+                 'description' => $this->description, 
+                 'type' => $this->type, 
+                 'content' => $this->getContent(), // Using getContent method for polymorphism 
+                 'category' => $this->category->name, // Assuming Category has a name property 
+                 'teacher' => $this->teacher->username, // Assuming User has a username property 
+                 'tags' => array_map(function($tag) { return $tag->name; },// Assuming Tag has a name property 
+                 $this->tags), 
+                ];
+        }
     }
 
 

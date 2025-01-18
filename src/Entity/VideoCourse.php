@@ -8,7 +8,7 @@
         {
             parent::__construct($id, $title, $description,"video",$content,$category,$teacher,$tags);
         }
-        public function getContent()
+        public function getContent() : string
         {
             return $this->getYoutubeEmbed($this->content);
         }

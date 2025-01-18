@@ -55,19 +55,23 @@ class EnrollmentDAO {
 
     public function saveEnrollment(Enrollment $enrollment): bool {
         $stmt = $this->con->prepare("INSERT INTO Enrollment (user_id, course_id, enrollment_date) VALUES (:user_id, :course_id, :enrollment_date)");
-        return $stmt->execute([
-            'user_id' => $enrollment->user->getId(),
-            'course_id' => $enrollment->course->getId(),
-            'enrollment_date' => $enrollment->enrollmentDate->format('Y-m-d H:i:s')
-        ]);
+        try{
+            return $stmt->execute([
+                'user_id' => $enrollment->user->id,
+                'course_id' => $enrollment->course->id,
+                'enrollment_date' => $enrollment->enrollmentDate->format('Y-m-d H:i:s')
+            ]);
+        }catch(\PDOException){
+            return false;
+        }
     }
 
     public function updateEnrollment(Enrollment $enrollment): bool {
         $stmt = $this->con->prepare("UPDATE Enrollment SET user_id = :user_id, course_id = :course_id, enrollment_date = :enrollment_date WHERE enrollment_id = :enrollment_id");
         return $stmt->execute([
             'enrollment_id' => $enrollment->id,
-            'user_id' => $enrollment->user->getId(),
-            'course_id' => $enrollment->course->getId(),
+            'user_id' => $enrollment->user->id,
+            'course_id' => $enrollment->course->id(),
             'enrollment_date' => $enrollment->enrollmentDate->format('Y-m-d H:i:s')
         ]);
     }
