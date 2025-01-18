@@ -39,17 +39,27 @@
                 header("location: /admin/dashboard");
                 exit;
             }
+
+            //GET QUERIES
             $page = isset($_GET["page"]) ? $_GET["page"] : 1;
             $category = isset($_GET["category"]) ? $_GET["category"] : "";
             $tag = isset($_GET["tag"]) ? $_GET["tag"] : "";
             $term = isset($_GET["term"]) ? $_GET["term"] : "";
             $type = isset($_GET["type"]) ? $_GET["type"] : "";
+
+            //PAGINATION
             $perPage = 4;
             $courses = !$term ?  $this->courseDAO->getAllCoursesPaginationv2($page,$perPage,$category,$tag,$type) : $this->courseDAO->searchCourses($term);
+            $totalCourses = $this->courseDAO->getTotalCoursesFilter($category,$tag,$type);
             $categories = $this->categoryDAO->getAllCategories();
             $tags = $this->tagDAO->getAllTags();
+            $totalPages = ceil($totalCourses/$perPage);
+
+            //FILTERS
             $documentCoursesCount = $this->courseDAO->getDocumentCoursesCount();
             $videoCoursesCount = $this->courseDAO->getVideoCoursesCount();
+
+
             $isLogged = $this->auth->isAuthenticated();
             include "../src/Views/catalogue.php";
         }

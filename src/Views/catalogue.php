@@ -37,18 +37,7 @@
             </div>
         </div>
 
-        <!-- Filters Tags -->
-        <div class="flex flex-wrap gap-2 mb-8">
-            <button class="px-4 py-2 rounded-full text-sm bg-blue-500/20 text-blue-300 hover:bg-blue-500/30">
-                Développement Web
-                <span class="ml-2">×</span>
-            </button>
-            <button class="px-4 py-2 rounded-full text-sm bg-blue-500/20 text-blue-300 hover:bg-blue-500/30">
-                PHP
-                <span class="ml-2">×</span>
-            </button>
-            <!-- Add more filter tags as needed -->
-        </div>
+        
 
         <div class="grid grid-cols-12 gap-8">
             <!-- Sidebar Filters -->
@@ -59,8 +48,8 @@
                     <div class="space-y-3">
                         <?php foreach($categories as $category) :?>
                         <label class="flex items-center text-gray-300">
-                            <input type="checkbox" value="<?php echo $category->id ?>" class="form-checkbox rounded text-blue-500 bg-gray-700 border-gray-600">
-                            <span class="ml-2"><?php echo $category->name.'('.$category->course_count.')' ?></span>
+                            <input onclick="fetchData(1)" name="category" type="radio" value="<?php echo $category->id ?>" class="form-checkbox rounded text-blue-500 bg-gray-700 border-gray-600">
+                            <span  class="ml-2"><?php echo $category->name.'('.$category->course_count.')' ?></span>
                         </label>
                         <?php endforeach; ?>
                         <!-- Add more categories -->
@@ -72,7 +61,7 @@
                     <h3 class="text-lg font-semibold text-white mb-4">Tags populaires</h3>
                     <div class="flex flex-wrap gap-2">
                         <?php foreach($tags as $tag) : ?>
-                        <button class="px-3 py-1 rounded-full text-sm bg-gray-700 text-gray-300 hover:bg-gray-600">
+                        <button  data-value="<?php echo $tag->id ?>" class="tag px-3 py-1 rounded-full text-sm bg-gray-700 text-gray-300 hover:bg-gray-600">
                             <?php echo $tag->name; ?>
                         </button>
                         <?php endforeach; ?>
@@ -84,11 +73,11 @@
                     <h3 class="text-lg font-semibold text-white mb-4">Type de contenu</h3>
                     <div class="space-y-3">
                         <label class="flex items-center text-gray-300">
-                            <input type="checkbox" class="form-checkbox rounded text-blue-500 bg-gray-700 border-gray-600">
+                            <input onclick="fetchData(1)" type="checkbox" name="type" value="video" class="form-checkbox rounded text-blue-500 bg-gray-700 border-gray-600">
                             <span class="ml-2">Vidéo (<?php echo $videoCoursesCount ?>)</span>
                         </label>
                         <label class="flex items-center text-gray-300">
-                            <input type="checkbox" class="form-checkbox rounded text-blue-500 bg-gray-700 border-gray-600">
+                            <input type="checkbox" onclick="fetchData(1)" name="type" value="document" class="form-checkbox rounded text-blue-500 bg-gray-700 border-gray-600">
                             <span class="ml-2">Document (<?php echo $documentCoursesCount ?>)</span>
                         </label>
                     </div>
@@ -99,7 +88,7 @@
             <div class="col-span-12 md:col-span-9">
                 <!-- Sort Bar -->
                 <div class="flex justify-between items-center mb-6">
-                    <p class="text-gray-400">348 cours trouvés</p>
+                    <p id="total" class="text-gray-400"><?php echo $totalCourses ?> cours trouvés</p>
                     <select class="bg-gray-800/50 border border-gray-700 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option>Plus populaires</option>
                         <option>Plus récents</option>
@@ -107,9 +96,8 @@
                         <option>Prix décroissant</option>
                     </select>
                 </div>
-
                 <!-- Course Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div id="coursesData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Course Card -->
                      <?php foreach($courses as $course) : ?>
                     <div class="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:shadow-lg hover:shadow-blue-500/10 transition-shadow">
@@ -134,6 +122,7 @@
                             </div>
                             <h3 class="text-lg font-bold text-white mb-2"><?php echo $course->title; ?></h3>
                             <p class="text-gray-400 text-sm mb-4"><?php echo $course->description; ?></p>
+                            <?php echo $course->getContent(); ?>
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
                                     <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium">
@@ -152,12 +141,18 @@
 
                 <!-- Pagination -->
                 <div class="flex justify-center mt-8">
-                    <nav class="flex gap-2">
-                        <button class="px-4 py-2 rounded-lg bg-gray-800 text-gray-400 hover:bg-gray-700">Précédent</button>
-                        <button class="px-4 py-2 rounded-lg bg-blue-500 text-white">1</button>
-                        <button class="px-4 py-2 rounded-lg bg-gray-800 text-gray-400 hover:bg-gray-700">2</button>
-                        <button class="px-4 py-2 rounded-lg bg-gray-800 text-gray-400 hover:bg-gray-700">3</button>
-                        <button class="px-4 py-2 rounded-lg bg-gray-800 text-gray-400 hover:bg-gray-700">Suivant</button>
+                    <nav id="pagination" class="flex gap-2">
+                        <?php 
+                            for($i=1;$i<=$totalPages;$i++){
+                                if($i == $page){
+                                    echo '<button class="px-4 py-2 rounded-lg bg-blue-500 text-white">'.$i.'</button>
+';
+                                }else{
+                                    echo '<a href="javascript:void(0)" onclick="fetchData('.$i.')" class="px-4 py-2 rounded-lg bg-gray-800 text-gray-400 hover:bg-gray-700">'.$i.'</a>';
+                                } 
+                            }
+                        ?>
+                        
                     </nav>
                 </div>
             </div>
@@ -178,6 +173,46 @@
                 }
             }
         });
+        var selectedTag = null; 
+        $('.tag').on('click', function() { 
+            selectedTag = $(this).data('value'); 
+            fetchData(1); 
+        });
+        function fetchData(page) {
+            var category = $('input[name="category"]:checked').val();
+            var type = $('input[name="type"]:checked').length === 1 ? $('input[name="type"]:checked').val() : "";
+            var tag = selectedTag;
+            console.log(selectedTag);
+            $.ajax({ 
+                url: '/catalogue', 
+                type: 'GET', 
+                data: { page: page, category: category ,type: type, tag: tag}, 
+                success: function(data) { 
+                    $('#coursesData').html($(data).find('#coursesData').html()); 
+                    $('#pagination').html($(data).find('#pagination').html());
+                    $('#total').html($(data).find('#total').html());
+                }, 
+                dataType: 'html'
+            }); 
+        }
+        function searchData() {
+            var term = $('#search').val();
+            if(term){
+                $.ajax({ 
+                    url: '/catalogue', 
+                    type: 'GET', 
+                    data: { term: term}, 
+                    success: function(data) { 
+                        $('#userData tbody').html($(data).find('#userData tbody').html());
+                        $('#pagination').html("");
+                    }, 
+                    dataType: 'html'
+                });
+            }else{
+                fetchData(1);
+            } 
+        }
+
     </script>
 </body>
 </html>

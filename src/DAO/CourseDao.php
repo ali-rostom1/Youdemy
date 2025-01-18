@@ -282,4 +282,35 @@
             }
             return $courses;
         }
+        public function getTotalCoursesFilter($category,$tag,$type) : int
+        {
+            $query = !$tag ? "SELECT count(*) AS TOTAL FROM courseCategoryUser WHERE 1=1 " : "SELECT COUNT(*) AS TOTAL FROM courseCategoryUserTag WHERE 1=1 ";
+
+            if($category){
+                $query .= "AND category_id = :category_id ";
+            }
+            if($tag){
+                $query .= "AND tag_id = :tag_id ";
+            }
+            if($type){
+                $query .="AND type = :type ";
+            }
+
+            $stmt = $this->con->prepare($query);
+
+
+            if($category){
+                $stmt->bindParam(":category_id",$category,\PDO::PARAM_INT);
+            }
+            if($tag){
+                $stmt->bindParam(":tag_id",$tag,\PDO::PARAM_INT);
+            }
+            if($type){
+                $stmt->bindParam(":type",$type,\PDO::PARAM_STR);
+            }
+
+            $stmt->execute();
+            
+            return $stmt->fetch(\PDO::FETCH_ASSOC)["TOTAL"];
+        }
     }

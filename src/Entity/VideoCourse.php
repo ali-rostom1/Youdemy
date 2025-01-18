@@ -10,6 +10,10 @@
         }
         public function getContent()
         {
-            return $this->content;
+            return $this->getYoutubeEmbed($this->content);
+        }
+        private function getYoutubeEmbed($url){
+            $videoId = substr($url, strpos($url, 'v=') + 2, 11);
+            return '<iframe width="560" height="315" src="https://www.youtube.com/embed/' . htmlspecialchars($videoId) . '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
         }
     }
