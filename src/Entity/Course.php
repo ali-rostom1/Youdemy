@@ -35,17 +35,18 @@
                 $this->$attr = $value;
             }
         }
-        abstract public function getContent() : string;
+        abstract public function getContent($asURL=false) : string;
 
-        public function jsonSerialize() : array
+        public function jsonSerialize($asURL=false) : array
         {
             return [
                  'id' => $this->id, 
                  'title' => $this->title, 
                  'description' => $this->description, 
                  'type' => $this->type, 
-                 'content' => $this->getContent(), 
-                 'category' => $this->category->name, 
+                 'content' => $this->getContent($asURL), 
+                 'category' => $this->category->name,
+                 'category-id' => $this->category->id,
                  'teacher' => $this->teacher->username, 
                  'tags' => array_map(function($tag) { return $tag->name; }, 
                  $this->tags), 

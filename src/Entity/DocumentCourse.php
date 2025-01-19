@@ -7,7 +7,7 @@
         {
             parent::__construct($id, $title, $description,"document",$content,$category,$teacher,$tags);
         }
-        public function getContent() : string
+        public function getContent($asURL=false) : string
         {
             return $this->content;
         }

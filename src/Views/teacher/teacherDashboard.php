@@ -16,9 +16,9 @@
 </head>
 <body class="bg-blue-50">
 
-    <div class="flex min-h-screen bg-blue-50">
+    <div class="flex flex-col md:flex-row min-h-screen bg-blue-50">
         <!-- Sidebar -->
-        <aside class="w-64 bg-white shadow-lg">
+        <aside class="w-full md:w-64 bg-white shadow-lg">
             <div class="p-6">
                 <h1 class="text-2xl font-bold text-blue-800">Teacher Panel</h1>
             </div>
@@ -53,9 +53,9 @@
         <!-- Main Content -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto">
             <div class="container mx-auto px-6 py-8">
-                <div class="flex items-center justify-between mb-8">
+                <div class="flex flex-col md:flex-row items-center justify-between mb-8">
                     <h2 class="text-2xl font-semibold text-gray-800">Teacher Overview</h2>
-                    <a href="/logout" class="px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors flex items-center">
+                    <a href="/logout" class="mt-4 md:mt-0 px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                         </svg>
@@ -118,8 +118,8 @@
                         <canvas id="enrollmentChart" class="w-full h-64"></canvas>
                     </div>
                     <div class="bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Student Progress</h3>
-                        <canvas id="progressChart" class="w-full h-64"></canvas>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Top Courses</h3>
+                        <canvas id="topCoursesChart" class="w-full h-64"></canvas>
                     </div>
                 </div>
 
@@ -143,5 +143,106 @@
             </div>
         </main>
     </div>
+    
+    <script>
+        // Enrollment Trends Chart
+        const enrollmentCtx = document.getElementById('enrollmentChart').getContext('2d');
+        const enrollmentChart = new Chart(enrollmentCtx, {
+            type: 'line',
+            data: {
+                labels: <?php echo json_encode(array_column($enrollmentsByMonth, 'month')); ?>,
+                datasets: [{
+                    label: 'Enrollments',
+                    data: <?php echo json_encode(array_column($enrollmentsByMonth, 'TOTAL')); ?>,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    tension: 0.4, 
+                    pointStyle: 'circle', 
+                    pointRadius: 5, 
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)'
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Monthly Enrollments',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Enrollments'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Top Courses Chart
+        const topCoursesCtx = document.getElementById('topCoursesChart').getContext('2d');
+        const topCoursesChart = new Chart(topCoursesCtx, {
+            type: 'bar',
+            data: {
+                labels: <?php echo json_encode(array_column($top3Courses, 'title')); ?>,
+                datasets: [{
+                    label: 'Enrollments',
+                    data: <?php echo json_encode(array_column($top3Courses, 'TOTAL')); ?>,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Top Courses by Enrollments',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Enrollments'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Course'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>

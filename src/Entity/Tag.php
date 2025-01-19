@@ -1,7 +1,7 @@
 <?php
     namespace App\Entity;
 
-    class Tag{
+    class Tag implements \JsonSerializable{
         private $id;
         private $name;
 
@@ -18,5 +18,12 @@
             if(property_exists($this,$attr)){
                 $this->$attr = $value;
             }
+        }
+        public function jsonSerialize() : array
+        {
+            return [
+                'id' => $this->id,
+                'name' => $this->name
+            ];
         }
     }

@@ -71,6 +71,9 @@
     $router->add("/teacher/dashboard",function() use ($teacherController){
         $teacherController->dashboard();
     });
+    $router->add("/teacher/courses",function() use ($teacherController){
+        $teacherController->courses();
+    });
     
 
     

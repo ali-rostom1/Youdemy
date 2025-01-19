@@ -45,6 +45,9 @@ class TeacherController
         $totalEnrollments = $this->statisticsDAO->totalEnrollmentsTeacher($teacher);
         $recentEnrollments = $this->statisticsDAO->recentEnrollments($teacher);
 
+        $enrollmentsByMonth = $this->statisticsDAO->totalEnrollmentsByMonthTeacher($teacher);
+        $top3Courses = $this->statisticsDAO->getTop3CoursesByTeacher($teacher);
+
         include "../src/Views/teacher/teacherDashboard.php";
     }
 
@@ -58,7 +61,7 @@ class TeacherController
         include "../src/Views/createCourse.php";
     }
 
-    public function manageCourses() : void
+    public function courses() : void
     {
         if (!$this->auth->getCurrentUser() || !$this->auth->isTeacher()) {
             header("location: /authentification");
@@ -67,8 +70,12 @@ class TeacherController
 
         $teacher = $this->auth->getCurrentUser();
         $courses = $this->courseDAO->getCoursesByTeacher($teacher);
-        $courseDataJson = json_encode($courses);
+        $courseDataJson = json_encode(array_map(function($course) {
+            return $course->jsonSerialize(true);
+        }, $courses));
+        $categories = $this->categoryDAO->getAllCategories();
+        $tags = $this->tagDAO->getAllTags();
 
-        include "../src/Views/manageCourses.php";
+        include "../src/Views/teacher/courses.php";
     }
 }

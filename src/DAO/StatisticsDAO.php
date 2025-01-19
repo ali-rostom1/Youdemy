@@ -56,5 +56,20 @@ class StatisticsDAO{
 
 
     }
-
+    public function totalEnrollmentsByMonthTeacher(User $teacher) : array
+    {
+        $query = "SELECT DATE_FORMAT(enrollment_date, '%Y-%m') as month, COUNT(*) as TOTAL FROM coursecategoryuserenrollment WHERE teacher_id = :teacher_id GROUP BY month ORDER BY month";
+        $stmt = $this->con->prepare($query);
+        $stmt->bindValue(':teacher_id',$teacher->id,\PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    public function getTop3CoursesByTeacher(User $teacher) : array
+    {
+        $query = "SELECT title, COUNT(*) as TOTAL FROM coursecategoryuserenrollment WHERE teacher_id = :teacher_id GROUP BY course_id ORDER BY TOTAL DESC LIMIT 3";
+        $stmt = $this->con->prepare($query);
+        $stmt->bindValue(':teacher_id',$teacher->id,\PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }
