@@ -37,9 +37,12 @@
                     </div>
                     <a href="/catalogue" class="text-gray-300 hover:text-blue-400 font-medium">Catalogue</a>
                     <?php if(!isset($isLogged) || !$isLogged) echo '<a href="/authentification" class="px-6 py-3 rounded-full text-white bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500">Commencer</a>'; ?>
-                    <?php if(isset($isLogged) && $isLogged) {
-                            echo '<a href="/my_courses" class="text-gray-300 hover:text-blue-400 font-medium">My Courses</a>';
+                    <?php if(isset($isLogged) && $isLogged && $user->role === "student"){
+                            echo '<a href="/myCourses" class="text-gray-300 hover:text-blue-400 font-medium">My Courses</a>';
                             echo '<a href="/logout" class="px-6 py-3 rounded-full text-white bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500">logout</a>'; 
+                            }
+                            else if(isset($isLogged) && $isLogged && $user->role === "teacher"){
+                                 echo '<a href="/logout" class="px-6 py-3 rounded-full text-white bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500">logout</a>';
                             }
                         ?>
 

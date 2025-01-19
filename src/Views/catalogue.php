@@ -252,7 +252,6 @@
                     $('#pagination').html($(data).find('#pagination').html());
                     $('#total').html($(data).find('#total').html());
                     initEventHandlers();
-                    console.log(courses);
                 }, 
                 dataType: 'html'
             }); 
@@ -269,7 +268,6 @@
                         $('#coursesData').html($(data).find('#coursesData').html());
                         $('#total').html($(data).find('#total').html());
                         $('#pagination').html("");
-                        console.log(courses);
                         initEventHandlers();
                     }, 
                     dataType: 'html'
@@ -278,7 +276,7 @@
                 fetchData(1);
             } 
         }
-        
+        const role = '<?php echo $user ? $user->role : NULL ?>';
         function initEventHandlers(){
             $(document).on('click', '.course-card', function() { 
                 const id = $(this).data('value'); 
@@ -292,28 +290,32 @@
         
 
         function showModal(courseData) {
-            const modal = $('#courseModal');
-            const tagsContainer = $('#modalTags');
-            
-            tagsContainer.empty();
-            
-            
-            courseData.tags.forEach(tag => {
-                const tagElement = $('<span></span>').addClass('modal-tag px-2 py-1 rounded text-xs font-medium bg-gray-200 text-gray-700 mr-2').text(tag);
-                tagsContainer.append(tagElement);
-            });
-            $('#modalCourseName').text(courseData.title);
-            $('#modalCategory').text(courseData.category);
-            $('#modalDescription').text(courseData.description);
-            $('#modalType').text(courseData.type);
-            $('#modalTeacher').text(courseData.teacher);
-            $('#signUp').off("click").on("click",function(){
-                window.location.href="/course/signup?id="+courseData.id;
-            })
+            if(role === "student"){
+                const modal = $('#courseModal');
+                const tagsContainer = $('#modalTags');
+                
+                tagsContainer.empty();
+                
+                
+                courseData.tags.forEach(tag => {
+                    const tagElement = $('<span></span>').addClass('modal-tag px-2 py-1 rounded text-xs font-medium bg-gray-200 text-gray-700 mr-2').text(tag);
+                    tagsContainer.append(tagElement);
+                });
+                $('#modalCourseName').text(courseData.title);
+                $('#modalCategory').text(courseData.category);
+                $('#modalDescription').text(courseData.description);
+                $('#modalType').text(courseData.type);
+                $('#modalTeacher').text(courseData.teacher);
+                $('#signUp').off("click").on("click",function(){
+                    window.location.href="/course/signup?id="+courseData.id;
+                })
 
-            modal.removeClass('hidden');
+                modal.removeClass('hidden');
 
-            $('body').css('overflow', 'hidden');
+                $('body').css('overflow', 'hidden');
+            }else {
+                alert('You do not have permission to see details.');
+            }
         }
 
         function closeModal() {
@@ -322,22 +324,30 @@
         }
 
         initEventHandlers();
-        if(<?php echo isset($_GET["error"]) ? 1 : 0 ?>){
+        if (<?php echo isset($_GET["error"]) ? 1 : 0 ?>) {
             Swal.fire({
                 title: 'Error!',
-                text: 'Do you want to continue',
+                text: 'You are already enrolled to this course!',
                 icon: 'error',
-                confirmButtonText: 'Cool'
-            })
-        }else if(<?php echo isset($_GET["success"]) ? 1 : 0 ?>)
-        {
+                confirmButtonText: 'okay'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = window.location.pathname;
+                }
+            });
+        }else if(<?php echo isset($_GET["success"]) ? 1 : 0 ?>) {
             Swal.fire({
                 title: 'You have Been enrolled to the course',
                 text: 'Do you want to continue',
                 icon: 'success',
                 confirmButtonText: 'Confirm'
-            })
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = window.location.pathname;
+                }
+            });
         }
+
     </script>
 </body>
 </html>

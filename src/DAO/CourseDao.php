@@ -30,7 +30,6 @@
                 return new VideoCourse($row["course_id"],$row["title"],$row["description"],$row["content"],$category,$teacher,$tags);
             }
 
-
         }
         private function getTagsByCourseID(int $courseId) : array
         {
@@ -312,5 +311,70 @@
             $stmt->execute();
             
             return $stmt->fetch(\PDO::FETCH_ASSOC)["TOTAL"];
+        }
+        public function getCoursesByStudent(User $student) : array
+        {
+            try{
+                $query = "SELECT * FROM coursecategoryuserenrollment WHERE student_id =:student_id";
+                $stmt = $this->con->prepare($query);
+                $stmt->bindValue(":student_id",$student->id,\PDO::PARAM_INT);
+                $stmt->execute();
+                $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                
+                $courses = [];
+
+                foreach($rows as $row){
+                    $courses[] = $this->mapRowToCourse($row);
+                }
+                return $courses;
+
+            }catch(\PDOException){
+                return false;
+            }
+            
+        }
+        public function searchCoursesByStudent(User $student,$term) : array
+        {
+            try{
+                $term = '%'.$term.'%';
+                $query = "SELECT * FROM coursecategoryuserenrollment WHERE student_id =:student_id AND title LIKE :term";
+                $stmt = $this->con->prepare($query);
+                $stmt->bindValue(":student_id",$student->id,\PDO::PARAM_INT);
+                $stmt->bindParam(":term",$term,\PDO::PARAM_STR);
+                $stmt->execute();
+                $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                
+                $courses = [];
+
+                foreach($rows as $row){
+                    $courses[] = $this->mapRowToCourse($row);
+                }
+                return $courses;
+
+            }catch(\PDOException){
+                return false;
+            }
+            
+        }
+        public function getCoursesByTeacher(User $teacher) : array
+        {
+            try{
+                $query = "SELECT * FROM coursecategoryuser WHERE teacher_id =:teacher_id";
+                $stmt = $this->con->prepare($query);
+                $stmt->bindValue(":teacher_id",$teacher->id,\PDO::PARAM_INT);
+                $stmt->execute();
+                $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                
+                $courses = [];
+
+                foreach($rows as $row){
+                    $courses[] = $this->mapRowToCourse($row);
+                }
+                return $courses;
+
+            }catch(\PDOException){
+                return false;
+            }
+            
         }
     }

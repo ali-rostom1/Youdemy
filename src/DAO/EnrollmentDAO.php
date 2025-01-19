@@ -15,7 +15,7 @@ class EnrollmentDAO {
         $this->con = Database::getInstance()->getConnection();
     }
 
-    private function mapRowToEnrollment(array $row): Enrollment {
+    public function mapRowToEnrollment(array $row): Enrollment {
         $category = new Category($row['category_name'], $row['category_description'],$row['category_id'],);
         $teacher = new User($row['teacher_id'], $row['teacher_name'], null, $row['teacher_email'], 'teacher', $row['status']);
         if ($row['type'] === 'document') {

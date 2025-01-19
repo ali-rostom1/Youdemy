@@ -35,6 +35,7 @@
             $categories = array_slice($this->categoryDAO->getAllCategories(), 0, 3); 
             $courses = array_slice($this->courseDAO->getAllCourses(), 0, 3);
             $isLogged = $this->auth->isAuthenticated();
+            $user = $this->auth->getCurrentUser();
             include "../src/Views/home.php";
         }
         public function catalogue() : void
@@ -67,6 +68,7 @@
             $courseDataJson = json_encode($courses);
 
             $isLogged = $this->auth->isAuthenticated();
+            $user = $this->auth->getCurrentUser();
             include "../src/Views/catalogue.php";
         }
         public function courseSignUp() : void
@@ -92,5 +94,27 @@
                 exit;
             }
 
+        }
+        public function myCourses() : void
+        {
+            if($this->auth->getCurrentUser() && !$this->auth->isStudent()){
+                header("location: /");
+                exit;
+            }else if(!$this->auth->getCurrentUser())
+            {
+                header("location: /authentification");
+                exit;
+            }
+
+            $term = isset($_GET["term"]) ?  $_GET["term"] : "";
+
+
+            $student = $this->auth->getCurrentUser();
+            $courses = !$term ? $this->courseDAO->getCoursesByStudent($student) : $this->courseDAO->searchCoursesByStudent($student,$term);
+            $courseDataJson = json_encode($courses);
+
+            $isLogged = $this->auth->isAuthenticated();
+            $user = $this->auth->getCurrentUser();
+            include "../src/Views/myCourses.php";
         }
     }

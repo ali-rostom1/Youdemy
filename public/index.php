@@ -2,9 +2,10 @@
     //NAMESPACES NEEDED
     use App\Controller\AdminController;
     use App\Controller\AuthController;
-    use App\Controller\CourseController;
-use App\Controller\DefaultController;
-use App\DAO\CategoryDAO;
+
+    use App\Controller\DefaultController;
+    use App\Controller\TeacherController;
+    use App\DAO\CategoryDAO;
     use App\DAO\CourseDAO;
     use App\DAO\EnrollmentDAO;
     use App\DAO\TagDAO;
@@ -26,7 +27,7 @@ use App\DAO\CategoryDAO;
     $defaultController = new DefaultController();
     $authController = new AuthController();
     $adminController = new AdminController();
-
+    $teacherController = new TeacherController();
 
 
 
@@ -64,8 +65,13 @@ use App\DAO\CategoryDAO;
     $router->add("/course/signup",function() use ($defaultController){
         $defaultController->courseSignUp();
     });
-
-
+    $router->add("/myCourses",function() use ($defaultController){
+        $defaultController->myCourses();
+    });
+    $router->add("/teacher/dashboard",function() use ($teacherController){
+        $teacherController->dashboard();
+    });
+    
 
     
     $requestedURI = $_SERVER["REQUEST_URI"];// GETTING THE REQUEST URI

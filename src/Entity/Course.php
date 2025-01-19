@@ -44,10 +44,10 @@
                  'title' => $this->title, 
                  'description' => $this->description, 
                  'type' => $this->type, 
-                 'content' => $this->getContent(), // Using getContent method for polymorphism 
-                 'category' => $this->category->name, // Assuming Category has a name property 
-                 'teacher' => $this->teacher->username, // Assuming User has a username property 
-                 'tags' => array_map(function($tag) { return $tag->name; },// Assuming Tag has a name property 
+                 'content' => $this->getContent(), 
+                 'category' => $this->category->name, 
+                 'teacher' => $this->teacher->username, 
+                 'tags' => array_map(function($tag) { return $tag->name; }, 
                  $this->tags), 
                 ];
         }
