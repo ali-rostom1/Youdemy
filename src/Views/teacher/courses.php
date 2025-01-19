@@ -12,6 +12,7 @@
     <link rel="icon" type="image/svg+xml" href="../assets/images/icons/favicon.svg">
     <link rel="alternate icon" type="image/png" href="/favicon.png">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
@@ -85,15 +86,6 @@
                         Logout
                     </a>
                 </div>
-                <div class="flex items-center justify-center mb-8">
-                    <a href="/teacher/create-course" class="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors flex items-center">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                        New Course
-                    </a>
-                </div>
-
                 <!-- Courses List -->
                 <div class="space-y-4">
                     <?php foreach ($courses as $course): ?>
@@ -164,7 +156,7 @@
 
                     <div class="space-y-2">
                         <label class="block text-sm font-medium text-gray-700">Category</label>
-                        <select id="editCategory" name="category_id" 
+                        <select id="editCategory" name="category" required
                                 class="mt-1 block w-full px-4 py-3 rounded-md border border-gray-300 shadow-sm 
                                        focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 
                                        transition duration-150 ease-in-out bg-white">
@@ -181,6 +173,25 @@
                             <?php foreach($tags as $tag): ?>
                                 <option value="<?php echo $tag->id ?>"><?php echo $tag->name ?></option>
                             <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">Course Description</label>
+                        <textarea id="editDescription" name="description" required
+                                class="mt-1 block w-full px-4 py-3 rounded-md border border-gray-300 shadow-sm 
+                                       focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 
+                                       transition duration-150 ease-in-out min-h-[100px]"></textarea>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">Course Type</label>
+                        <select id="editType" name="type" required
+                                class="mt-1 block w-full px-4 py-3 rounded-md border border-gray-300 shadow-sm 
+                                       focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 
+                                       transition duration-150 ease-in-out bg-white">
+                            <option value="video">Video Course</option>
+                            <option value="document">Document Course</option>
                         </select>
                     </div>
 
@@ -226,6 +237,11 @@
                 noChoicesText: 'No more tags available'
             });
         }
+
+        // Handle course type changes
+        document.getElementById('editType').addEventListener('change', function(e) {
+            updateContentInput(e.target.value);
+        });
     });
 
     function showEditModal(courseId) {
@@ -235,12 +251,13 @@
         document.getElementById('editCourseId').value = course.id;
         document.getElementById('editTitle').value = course.title;
         document.getElementById('editCategory').value = course["category-id"];
-        
+        document.getElementById('editDescription').value = course.description;
+        document.getElementById('editType').value = course.type;
+
         // Set selected tags using Choices.js
         if (tagSelect) {
             tagSelect.clearStore();
             tagSelect.clearChoices();
-            
             
             const availableTags = <?php echo json_encode($tags); ?>;
             tagSelect.setChoices(availableTags.map(tag => ({
@@ -250,45 +267,48 @@
             })));
         }
 
-        // Configure content input based on course type
-        const contentInput = document.getElementById('contentInput');
-        contentInput.innerHTML = ''; // Clear previous content
+        // Update content input based on course type
+        updateContentInput(course.type).then(() => {
+            if (course.type === 'video') {
+                document.getElementById('editContent').value = course.content;
+            } else if (course.type === 'document') {
+                editor.setData($('<textarea/>').html(course.content).text());
+            }
+        });
 
-        if (course.type === 'video') {
+        document.getElementById('editModal').classList.remove('hidden');
+    }
+
+    async function updateContentInput(type) {
+        const contentInput = document.getElementById('contentInput');
+        if (editor) {
+            await editor.destroy();
+            editor = null;
+        }
+
+        if (type === 'video') {
             contentInput.innerHTML = `
                 <div class="space-y-2">
                     <label class="block text-sm font-medium text-gray-700">Video URL</label>
-                    <input type="url" id="editContent" name="content" value="${course.content}" 
+                    <input type="url" id="editContent" name="content" 
                            class="mt-1 block w-full px-4 py-3 rounded-md border border-gray-300 shadow-sm 
                                   focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 
                                   transition duration-150 ease-in-out">
                 </div>
             `;
-        } else if (course.type === 'document') {
+        } else if (type === 'document') {
             contentInput.innerHTML = `
                 <div class="space-y-2">
                     <label class="block text-sm font-medium text-gray-700">Document Content</label>
                     <textarea id="editContent" name="content" 
                               class="mt-1 block w-full px-4 py-3 rounded-md border border-gray-300 shadow-sm 
                                      focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 
-                                     transition duration-150 ease-in-out min-h-[200px]">${course.content}</textarea>
+                                     transition duration-150 ease-in-out min-h-[200px]"></textarea>
                 </div>
             `;
             // Initialize CKEditor
-            if (editor) {
-                editor.destroy();
-            }
-            ClassicEditor
-                .create(document.querySelector('#editContent'))
-                .then(newEditor => {
-                    editor = newEditor;
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+            editor = await ClassicEditor.create(document.querySelector('#editContent'));
         }
-
-        document.getElementById('editModal').classList.remove('hidden');
     }
 
     function closeEditModal() {
@@ -307,13 +327,14 @@
         const formData = new FormData(e.target);
         const courseId = formData.get('id');
         
-        let content = formData.get('content');
+        
         if (editor) {
-            content = editor.getData();
+            $('#documentContent').css('display', 'block');
+            formData.set('content',editor.getData());
         }
 
         try {
-            const response = await fetch(`/course/update/${courseId}`, {
+            const response = await fetch(`/course/update`, {
                 method: 'POST',
                 body: formData
             });
@@ -330,9 +351,8 @@
         }
     });
 
-    // Add this to your existing script section
     const courses = <?php echo $courseDataJson ?>;
-    console.log(courses);
+
     function deleteCourse(id) {
         if (confirm('Are you sure you want to delete this course?')) {
             fetch(`/course/delete?id=${id}`, { method: 'POST' })

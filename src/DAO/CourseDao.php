@@ -75,24 +75,29 @@
 
         public function saveCourse(Course $course) : bool
         {
-            $query = "INSERT INTO Courses(title, description, type, content, category_id, teacher_id) values (:title,:description,:type,:content,:category_id,:teacher_id);";
-            $stmt = $this->con->prepare($query);
 
-            $result = $stmt->execute([
-                'title' => $course->title,
-                'description' => $course->description, 
-                'type' => $course->type, 
-                'content' => $course->content, 
-                'category_id' => $course->category->id, 
-                'teacher_id' => $course->teacher->id
-            ]);
-            if($result)
-            {
-                $id = $this->con->lastInsertId();
-                $this->saveTags($id,$course->tags); 
-                return true;
+            try{
+                $query = "INSERT INTO Courses(title, description, type, content, category_id, teacher_id) values (:title,:description,:type,:content,:category_id,:teacher_id);";
+                $stmt = $this->con->prepare($query);
+
+                $result = $stmt->execute([
+                    'title' => $course->title,
+                    'description' => $course->description, 
+                    'type' => $course->type, 
+                    'content' => $course->content, 
+                    'category_id' => $course->category->id, 
+                    'teacher_id' => $course->teacher->id
+                ]);
+                if($result)
+                {
+                    $id = $this->con->lastInsertId();
+                    $this->saveTags($id,$course->tags); 
+                    return true;
+                }
+                return false;
+            }catch(\PDOException ){
+                return false;
             }
-            return false;
         }
         public function saveTags(int $courseId,array $tags) : void
         {

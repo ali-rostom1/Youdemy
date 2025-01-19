@@ -31,6 +31,9 @@
             if($this->auth->isAdmin()){
                 header("location: /admin/dashboard");
                 return;
+            }else if($this->auth->isTeacher()){
+                header("location: /teacher/dashboard");
+                return;
             }
             $categories = array_slice($this->categoryDAO->getAllCategories(), 0, 3); 
             $courses = array_slice($this->courseDAO->getAllCourses(), 0, 3);
@@ -44,6 +47,9 @@
             {
                 header("location: /admin/dashboard");
                 exit;
+            }else if($this->auth->isTeacher()){
+                header("location: /teacher/dashboard");
+                return;
             }
 
             //GET QUERIES
@@ -104,6 +110,9 @@
             {
                 header("location: /authentification");
                 exit;
+            }else if($this->auth->isTeacher()){
+                header("location: /teacher/dashboard");
+                return;
             }
 
             $term = isset($_GET["term"]) ?  $_GET["term"] : "";

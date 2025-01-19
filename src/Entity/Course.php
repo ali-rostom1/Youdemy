@@ -4,7 +4,7 @@
 
     abstract class Course implements \JsonSerializable
     {
-        protected int $id;
+        protected ?int $id;
         protected string $title;
         protected string $description;
         protected string $type;
@@ -44,12 +44,11 @@
                  'title' => $this->title, 
                  'description' => $this->description, 
                  'type' => $this->type, 
-                 'content' => $this->getContent($asURL), 
+                 'content' => htmlspecialchars($this->getContent($asURL),ENT_QUOTES, 'UTF-8'), 
                  'category' => $this->category->name,
                  'category-id' => $this->category->id,
                  'teacher' => $this->teacher->username, 
-                 'tags' => array_map(function($tag) { return $tag->name; }, 
-                 $this->tags), 
+                 'tags' => $this->tags
                 ];
         }
     }

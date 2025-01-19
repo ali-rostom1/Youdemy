@@ -74,7 +74,15 @@
     $router->add("/teacher/courses",function() use ($teacherController){
         $teacherController->courses();
     });
-    
+    $router->add("/teacher/create-course",function() use ($teacherController){
+        $teacherController->createCourse();
+    });
+    $router->add("/course/create",function() use ($teacherController){
+        $teacherController->create();
+    });
+    $router->add("/course/update",function() use ($teacherController){
+        $teacherController->update();
+    });
 
     
     $requestedURI = $_SERVER["REQUEST_URI"];// GETTING THE REQUEST URI

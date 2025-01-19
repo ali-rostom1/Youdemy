@@ -18,7 +18,7 @@
                             <a href="/catalogue" class="px-8 py-4 rounded-full text-white bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 font-medium text-lg">
                                 Découvrir les cours
                             </a>
-                            <a href="/register" class="px-8 py-4 rounded-full text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 font-medium text-lg">
+                            <a href="/authentification" class="px-8 py-4 rounded-full text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 font-medium text-lg">
                                 Devenir formateur
                             </a>
                         </div>

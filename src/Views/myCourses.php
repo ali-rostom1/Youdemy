@@ -9,7 +9,7 @@
         </div>
 
         <!-- Course Grid -->
-        <div id="coursesData" data-courses='<?php echo $courseDataJson  ?>' class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="coursesData" data-courses='<?php echo $courseDataJson ?>' class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Course Card -->
             <?php foreach($courses as $course) :?>
             <div data-value="<?php echo $course->id ?>" class="course-card bg-gray-800 rounded-lg overflow-hidden border border-gray-600 hover:shadow-lg hover:shadow-blue-500/10 transition-shadow cursor-pointer">
@@ -92,22 +92,21 @@
     </div>
 
     <script>
-        // Sample course data
         let courses = <?php echo $courseDataJson ?>;
-
+        
         function showCourseDetails(courseData) {
             const $modal = $('#courseModal');
             const $tagsContainer = $('#modalTags');
             const $documentContent = $('#documentContent');
-
             // Clear existing tags
             $tagsContainer.empty();
+            console.log(courseData.content);
 
             // Add tags
             $.each(courseData.tags, function(index, tag) {
                 const $tagElement = $('<span></span>')
                     .addClass('px-2 py-1 rounded text-xs font-medium bg-blue-500/20 text-blue-300')
-                    .text(tag);
+                    .text(tag.name);
                 $tagsContainer.append($tagElement);
             });
 
@@ -118,9 +117,12 @@
             $('#modalType').text(courseData.type);
             $('#modalTeacher').text(courseData.teacher);
 
+            decodedContent = $('<textarea/>').html(courseData.content).text();
+            
+            
             // Show document content
             $documentContent.removeClass('hidden');
-            $documentContent.find('.prose').html(courseData.content);
+            $documentContent.find('.prose').html(decodedContent);
 
             // Show modal
             $modal.removeClass('hidden');

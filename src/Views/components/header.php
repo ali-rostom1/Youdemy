@@ -32,9 +32,7 @@
 
                 <!-- Desktop menu -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <div class="relative">
-                        <input type="search" placeholder="Que souhaitez-vous apprendre ?" class="w-80 pl-4 pr-10 py-3 bg-gray-800/50 border border-gray-700 text-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
+                    
                     <a href="/catalogue" class="text-gray-300 hover:text-blue-400 font-medium">Catalogue</a>
                     <?php if(!isset($isLogged) || !$isLogged) echo '<a href="/authentification" class="px-6 py-3 rounded-full text-white bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500">Commencer</a>'; ?>
                     <?php if(isset($isLogged) && $isLogged && $user->role === "student"){
@@ -53,9 +51,6 @@
         <!-- Mobile menu -->
         <div id="mobile-menu" class="hidden md:hidden">
             <div class="px-2 pt-2 pb-3 space-y-1 bg-gray-800/50 backdrop-blur-lg border-b border-gray-700">
-                <div class="px-4 pb-4">
-                    <input type="search" placeholder="Rechercher..." class="w-full pl-4 pr-10 py-3 bg-gray-800/50 border border-gray-700 text-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
                 <a href="/catalogue" class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">Catalogue</a>
                 <div class="px-3 pt-4">
                     <a href="/authentification" class="block px-6 py-3 text-center rounded-full text-white bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500">Commencer</a>

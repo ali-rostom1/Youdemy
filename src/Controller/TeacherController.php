@@ -9,6 +9,8 @@ use App\DAO\StatisticsDAO;
 use App\DAO\TagDAO;
 use App\Entity\Enrollment;
 use App\Service\Authentification;
+use App\Entity\DocumentCourse;
+use App\Entity\VideoCourse;
 
 class TeacherController
 {
@@ -57,8 +59,10 @@ class TeacherController
             header("location: /authentification");
             exit;
         }
+        $categories = $this->categoryDAO->getAllCategories();
+        $tags = $this->tagDAO->getAllTags();
 
-        include "../src/Views/createCourse.php";
+        include "../src/Views/teacher/createCourse.php";
     }
 
     public function courses() : void
@@ -77,5 +81,66 @@ class TeacherController
         $tags = $this->tagDAO->getAllTags();
 
         include "../src/Views/teacher/courses.php";
+    }
+    public function create() : void
+    {
+        if (!$this->auth->getCurrentUser() || !$this->auth->isTeacher()) {
+            header("location: /authentification");
+            exit;
+        }
+        $teacher = $this->auth->getCurrentUser();
+        $title = $_POST["title"];
+        $description = $_POST["description"];
+        $type = $_POST["type"];
+        $content = $_POST["content"];
+        $category = $this->categoryDAO->getCategoryById($_POST["category"]);
+
+        $tagsIds = $_POST["tags"];
+        $tags = [];
+        foreach ($tagsIds as $tagId) {
+            $tags[] = $this->tagDAO->getTagById($tagId);
+        }
+         if($type == "video") {
+            $course = new VideoCourse(null, $title, $description, $content, $category, $teacher, $tags);
+        } else {
+            $course = new DocumentCourse(null, $title, $description, $content, $category, $teacher, $tags);
+        }
+        $result = $this->courseDAO->saveCourse($course);
+        if ($result) {
+            echo json_encode(["success" => true]);
+        } else {
+            echo json_encode(["success" => false]);
+        }
+    }
+    public function update() : void
+    {
+        if (!$this->auth->getCurrentUser() || !$this->auth->isTeacher()) {
+            header("location: /authentification");
+            exit;
+        }
+        $teacher = $this->auth->getCurrentUser();
+        $id = $_POST["id"];
+        $title = $_POST["title"];
+        $description = $_POST["description"];
+        $type = $_POST["type"];
+        $content = $_POST["content"];
+        $category = $this->categoryDAO->getCategoryById($_POST["category"]);
+
+        $tagsIds = isset($_POST["tags"]) ? $_POST["tags"] : [];
+        $tags = [];
+        foreach ($tagsIds as $tagId){
+            $tags[] = $this->tagDAO->getTagById($tagId);
+        }
+        if($type == "video") {
+            $course = new VideoCourse($id, $title, $description, $content, $category, $teacher, $tags);
+        }else {
+            $course = new DocumentCourse($id, $title, $description, $content, $category, $teacher, $tags);
+        }
+        $result = $this->courseDAO->updateCourse($course);
+        if ($result) {
+            echo json_encode(["success" => true]);
+        } else {
+            echo json_encode(["success" => false]);
+        }
     }
 }
