@@ -16,6 +16,6 @@
                 return;
             }
             http_response_code(404);
-            echo "404 not found";
+            include "../src/Views/status/404.php";
         }
     }
