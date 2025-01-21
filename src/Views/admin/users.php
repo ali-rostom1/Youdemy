@@ -58,15 +58,6 @@
                     </span>
                     Tags
                 </a>
-                <a href="/admin/enrollments" class="flex items-center px-6 py-3 text-gray-400 hover:bg-gray-700 hover:text-white transition-colors">
-                    <span class="inline-block mr-3">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                    </span>
-                    Enrollments
-                </a>
-                <!-- Other sidebar items remain the same -->
             </nav>
         </aside>
 
@@ -143,18 +134,18 @@
                                     <?php
                                         switch($user->status){
                                             case "active":
-                                                echo '<button class="px-3 py-1 bg-yellow-600 text-white rounded hover:bg-yellow-700">Suspend</button>
-                                                        <button class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Ban</button>';
+                                                echo '<button onclick="suspend('.$user->id.')" class="px-3 py-1 bg-yellow-600 text-white rounded hover:bg-yellow-700">Suspend</button>
+                                                        <button onclick="ban('.$user->id.')" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Ban</button>';
                                                 break;
                                             case "banned":
-                                                echo '<button class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Pardon</button>';
+                                                echo '<button onclick="pardon('.$user->id.')" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Pardon</button>';
                                                 break;
-                                            case "suspend":
-                                                echo '<button class="px-3 py-1 bg-yellow-600 text-white rounded hover:bg-yellow-700">Unsuspend</button>
-                                                    <button class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Ban</button>';
+                                            case "suspended":
+                                                echo '<button onclick="pardon('.$user->id.')" class="px-3 py-1 bg-yellow-600 text-white rounded hover:bg-yellow-700">Unsuspend</button>
+                                                    <button onclick="ban('.$user->id.')" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Ban</button>';
                                                 break;
                                             case "pending":
-                                                echo '<button class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>';
+                                                echo '<button onclick="approve('.$user->id.')" class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">Approve</button>';
 
                                         }
                                     ?>
@@ -215,6 +206,63 @@
             }else{
                 fetchData(1);
             } 
+        }
+        async function ban(id){
+            try{
+                const response = await fetch("/ban?id="+id);
+                const data = await response.json();
+                console.log(data);
+                if(data.success){
+                    window.location.reload();
+                }else {
+                    alert('Error  banning user');
+                }
+            }catch(error){
+                console.log(error);
+                alert("error Banning user id : "+id);
+            }
+        }
+        async function pardon(id){
+            try{
+                const response = await fetch("/approve?id="+id);
+                const data = await response.json();
+                if(data.success){
+                    window.location.reload();
+                }else {
+                    alert('Error  unbanning user');
+                }
+            }catch(error){
+                console.log(error);
+                alert("error unBanning user id : "+id);
+            }
+        }
+        async function suspend(id){
+            try{
+                const response = await fetch("/suspend?id="+id);
+                const data = await response.json();
+                if(data.success){
+                    window.location.reload();
+                }else {
+                    alert('Error  suspending user');
+                }
+            }catch(error){
+                console.log(error);
+                alert("error suspending user id : "+id);
+            }
+        }
+        async function approve(id){
+            try{
+                const response = await fetch("/approve?id="+id);
+                const data = await response.json();
+                if(data.success){
+                    window.location.reload();
+                }else {
+                    alert('Error  approving user');
+                }
+            }catch(error){
+                console.log(error);
+                alert("error approving user id : "+id);
+            }
         }
     </script>
 </body>

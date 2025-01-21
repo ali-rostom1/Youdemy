@@ -114,7 +114,7 @@ class TeacherController
     }
     public function update() : void
     {
-        if (!$this->auth->getCurrentUser() || !$this->auth->isTeacher()) {
+        if (!$this->auth->getCurrentUser() || (!$this->auth->isTeacher() && !$this->auth->isAdmin())) {
             header("location: /authentification");
             exit;
         }
@@ -142,5 +142,18 @@ class TeacherController
         } else {
             echo json_encode(["success" => false]);
         }
+    }
+    public function delete() : void
+    {
+        if (!$this->auth->getCurrentUser() || (!$this->auth->isTeacher() && !$this->auth->isAdmin())) {
+            header("location: /authentification");
+            exit;
+        }
+        if($this->courseDAO->deleteCourse($_GET["id"])){
+            echo json_encode(["success"=>true]);
+        }else{
+            echo json_encode(["success"=>false]);
+        }
+
     }
 }

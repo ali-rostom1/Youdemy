@@ -74,7 +74,8 @@
             if(!$this->auth->register($username,$password,$email,$role)){
                 header("location: /authentification?error=" . urlencode("Invalid inputs!"));
                 exit;
+            }else{
+                header("location: /authentification?success");
             }
-
         }
     }

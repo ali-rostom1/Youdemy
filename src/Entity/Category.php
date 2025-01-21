@@ -2,8 +2,8 @@
 
     namespace App\Entity;
 
-    class Category{
-        private int $id;
+    class Category implements \JsonSerializable{
+        private ?int $id;
         private string $name; 
         private string $description;
         private int $course_count;
@@ -25,6 +25,14 @@
                 $this->$attr = $value;
             }
         }
-
+        public function jsonSerialize(): mixed
+        {
+            return [
+                "id" => $this->id,
+                "name" => $this->name,
+                "description"=> $this->description,
+                "course_count" => $this->course_count
+            ]; 
+        }
     }
     

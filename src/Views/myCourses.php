@@ -9,7 +9,7 @@
         </div>
 
         <!-- Course Grid -->
-        <div id="coursesData" data-courses='<?php echo $courseDataJson ?>' class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="coursesData" data-courses='<?php htmlspecialchars($courseDataJson, ENT_QUOTES, 'UTF-8') ?>' class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Course Card -->
             <?php foreach($courses as $course) :?>
             <div data-value="<?php echo $course->id ?>" class="course-card bg-gray-800 rounded-lg overflow-hidden border border-gray-600 hover:shadow-lg hover:shadow-blue-500/10 transition-shadow cursor-pointer">

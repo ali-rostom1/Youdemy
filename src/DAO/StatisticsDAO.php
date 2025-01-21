@@ -72,4 +72,25 @@ class StatisticsDAO{
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    // Admin Statistics
+
+    public function getTotalCoursesPerTeacher() : array
+    {
+        $query = "SELECT teacher_name, COUNT(*) as TOTAL FROM coursecategoryuser GROUP BY teacher_id";
+        $stmt = $this->con->query($query);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    public function getTopCoursesByEnrollments() : array
+    {
+        $query = "SELECT title, COUNT(*) as TOTAL FROM coursecategoryuserenrollment GROUP BY course_id ORDER BY TOTAL DESC LIMIT 3";
+        $stmt = $this->con->query($query);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    public function recentUsers()
+    {
+        $query = "SELECT * FROM users WHERE role != 'admin' ORDER BY created_at DESC LIMIT 3";
+        $stmt = $this->con->query($query);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }

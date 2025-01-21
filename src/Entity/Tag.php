@@ -2,8 +2,8 @@
     namespace App\Entity;
 
     class Tag implements \JsonSerializable{
-        private $id;
-        private $name;
+        private ?int $id;
+        private string $name;
 
         public function __construct($id,$name){
             $this->id = $id;

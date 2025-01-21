@@ -355,7 +355,7 @@
 
     function deleteCourse(id) {
         if (confirm('Are you sure you want to delete this course?')) {
-            fetch(`/course/delete?id=${id}`, { method: 'POST' })
+            fetch(`/course/delete?id=${id}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {

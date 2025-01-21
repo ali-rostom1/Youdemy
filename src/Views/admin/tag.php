@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Category Management - Youdemy</title>
+    <title>Tag Management - Youdemy</title>
     <link rel="stylesheet" href="../assets/css/input.css">
     <link rel="stylesheet" href="../assets/css/output.css">
     <link rel="icon" type="image/svg+xml" href="assets/images/icons/favicon.svg">
@@ -43,7 +43,7 @@
                     </span>
                     Courses
                 </a>
-                <a href="#" class="flex items-center px-6 py-3 text-gray-100 bg-gray-700">
+                <a href="/admin/category" class="flex items-center px-6 py-3 text-gray-400 hover:bg-gray-700 hover:text-white transition-colors">
                     <span class="inline-block mr-3">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
@@ -51,7 +51,7 @@
                     </span>
                     Categories
                 </a>
-                <a href="/admin/tags" class="flex items-center px-6 py-3 text-gray-400 hover:bg-gray-700 hover:text-white transition-colors">
+                <a href="#" class="flex items-center px-6 py-3 text-gray-100 bg-gray-700">
                     <span class="inline-block mr-3">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
@@ -61,16 +61,17 @@
                 </a>
             </nav>
         </aside>
+
         <!-- Main Content -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto">
             <div class="container mx-auto px-6 py-8">
                 <div class="flex items-center justify-between mb-8">
-                    <h2 class="text-2xl font-semibold text-white">Category Management</h2>
-                    <button onclick="showAddCategoryModal()" class="px-4 py-2 text-gray-100 bg-green-600 rounded-lg hover:bg-green-700 transition-colors inline-flex items-center">
+                    <h2 class="text-2xl font-semibold text-white">Tag Management</h2>
+                    <button onclick="showAddTagModal()" class="px-4 py-2 text-gray-100 bg-green-600 rounded-lg hover:bg-green-700 transition-colors inline-flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                         </svg>
-                        Add New Category
+                        Add New Tags
                     </button>
                     <a href="/logout" class="px-4 py-2 text-gray-100 bg-red-600 rounded-lg hover:bg-red-700 transition-colors flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,12 +84,12 @@
                 <!-- Search Bar -->
                 <div class="bg-dark-lighter rounded-lg p-6 border border-gray-700 mb-8">
                     <div class="flex items-center">
-                        <input id="search" oninput="searchData()" type="text" placeholder="Search categories..." class="bg-dark border border-gray-600 text-white rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input id="search" oninput="searchData()" type="text" placeholder="Search tags..." class="bg-dark border border-gray-600 text-white rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                 </div>
 
-                <!-- Categories Table -->
-                <div id="categoryData" data-categories="<?php echo htmlspecialchars($categoriesDataJson,ENT_QUOTES,'UTF-8'); ?>" class="bg-dark-lighter rounded-lg border border-gray-700 overflow-hidden">
+                <!-- Tags Table -->
+                <div id="tagData" data-tags="<?php echo htmlspecialchars($tagsDataJson,ENT_QUOTES,'UTF-8'); ?>" class="bg-dark-lighter rounded-lg border border-gray-700 overflow-hidden">
                     <table class="w-full">
                         <thead class="bg-gray-800">
                             <tr>
@@ -98,17 +99,17 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-700">
-                            <?php foreach($categories as $category): ?>
+                            <?php foreach($tags as $tag): ?>
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-white"><?php echo $category->name ?></div>
+                                    <div class="text-sm font-medium text-white"><?php echo $tag->name ?></div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-400"><?php echo $category->course_count ?> courses</div>
+                                    <div class="text-sm text-gray-400"><?php echo $tag->course_count ?> courses</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                    <button onclick="editCategory(<?php echo $category->id ?>)" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">Edit</button>
-                                    <button onclick="deleteCategory(<?php echo $category->id ?>)" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Delete</button>
+                                    <button onclick="editTag(<?php echo $tag->id ?>)" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">Edit</button>
+                                    <button onclick="deleteTag(<?php echo $tag->id ?>)" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Delete</button>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -119,7 +120,7 @@
                 <!-- Pagination -->
                 <div class="flex items-center justify-between mt-6">
                     <div class="text-sm text-gray-400">
-                        Showing <?php echo ($page-1)*$perPage ?> to <?php echo ($page-1)*$perPage + count($categories) ?> of <?php echo count($categories) ?> categories
+                        Showing <?php echo ($page-1)*$perPage ?> to <?php echo ($page-1)*$perPage + count($tags) ?> of <?php echo count($tags) ?> tags
                     </div>
                     <div id="pagination" class="flex space-x-2">
                         <?php 
@@ -134,16 +135,15 @@
                     </div>
                 </div>
 
-                <!-- Add/Edit Category Modal -->
-                <div id="categoryModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+                <!-- Add/Edit Tag Modal -->
+                <div id="tagModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
                     <div class="bg-dark-lighter rounded-lg p-6 w-96">
-                        <h3 class="text-xl font-semibold text-white mb-4" id="modalTitle">Add New Category</h3>
-                        <input type="hidden" id="categoryId">
-                        <input type="text" id="categoryName" placeholder="Category name" class="bg-dark border border-gray-600 text-white rounded-lg px-4 py-2 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <textarea id="categoryDescription" id="categoryDescription" placeholder="Category description" class="bg-dark border border-gray-600 text-white rounded-lg px-4 py-2 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        <h3 class="text-xl font-semibold text-white mb-4" id="modalTitle">Add New Tags</h3>
+                        <input type="hidden" id="tagId">
+                        <textarea id="tagNames" placeholder="Enter tags separated by commas" class="bg-dark border border-gray-600 text-white rounded-lg px-4 py-2 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                         <div class="flex justify-end space-x-3">
                             <button onclick="closeModal()" class="px-4 py-2 text-gray-400 hover:text-white transition-colors">Cancel</button>
-                            <button onclick="saveCategory()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Save</button>
+                            <button onclick="saveTags()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Save</button>
                         </div>
                     </div>
                 </div>
@@ -151,94 +151,91 @@
         </main>
     </div>
     <script>
-        let categories = <?php echo $categoriesDataJson ?>;
-        console.log(categories);
-        function showAddCategoryModal() {
-            document.getElementById('modalTitle').textContent = 'Add New Category';
-            document.getElementById('categoryId').value = '';
-            document.getElementById('categoryName').value = '';
-            document.getElementById('categoryDescription').value = '';
-            document.getElementById('categoryModal').classList.remove('hidden');
-            document.getElementById('categoryModal').classList.add('flex');
+        let tags = <?php echo $tagsDataJson ?>;
+        
+        function showAddTagModal() {
+            document.getElementById('modalTitle').textContent = 'Add New Tags';
+            document.getElementById('tagId').value = '';
+            document.getElementById('tagNames').value = '';
+            document.getElementById('tagModal').classList.remove('hidden');
+            document.getElementById('tagModal').classList.add('flex');
         }
 
-        function editCategory(id) {
-            category = categories.find( c => c.id === id);
-            document.getElementById('modalTitle').textContent = 'Edit Category';
-            document.getElementById('categoryId').value = category.id;
-            document.getElementById('categoryName').value = category.name;
-            document.getElementById('categoryDescription').value = category.description;
-            document.getElementById('categoryModal').classList.remove('hidden');
-            document.getElementById('categoryModal').classList.add('flex');
+        function editTag(id) {
+            const tag = tags.find(t => t.id === id);
+            document.getElementById('modalTitle').textContent = 'Edit Tag';
+            document.getElementById('tagId').value = tag.id;
+            document.getElementById('tagNames').value = tag.name;
+            document.getElementById('tagModal').classList.remove('hidden');
+            document.getElementById('tagModal').classList.add('flex');
         }
 
         function closeModal() {
-            document.getElementById('categoryModal').classList.add('hidden');
-            document.getElementById('categoryModal').classList.remove('flex');
+            document.getElementById('tagModal').classList.add('hidden');
         }
 
-        async function saveCategory() {
-            const id = document.getElementById('categoryId').value;
-            const name = document.getElementById('categoryName').value;
-            const description = document.getElementById('categoryDescription').value;
+        async function saveTags() {
+            const id = document.getElementById('tagId').value;
+            const names = document.getElementById('tagNames').value.split(',').map(name => name.trim());
 
-            $.ajax({
+            if (names.length === 0) {
+                alert('Please enter at least one tag name');
+                return;
+            }
+
+            try {
+                $.ajax({
                 type: "POST",
-                url: '/admin/category/update',
+                url: '/admin/tag/update',
                 data: {
                     id: id,
-                    name: name,
-                    description: description
+                    names: names
+                    
                 },
                 success: function(data){
                     if(data.success) {
                         closeModal();
                         fetchData(1);
                     }else{
-                        alert('An error occurred while saving the category.');
+                        alert('An error occurred while saving the tags.');
                     }
                 },
                 dataType: 'json'
             });
-            
-        }
-
-        function deleteCategory(id) {
-            if(confirm('Are you sure you want to delete this category? This action cannot be undone.')) {
-                $.get('/admin/category/delete?id=' + id, function(data) {
-                    if(data.success) {
-                        fetchData(1);
-                    }else{
-                        alert('An error occurred while deleting the category.');
-                    }
-                },"json");
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error saving tags');
             }
         }
 
-        function fetchData(page) {
-            $.ajax({
-                url: '/admin/category',
-                type: 'GET',
-                data: { page: page },
-                success: function(data) {
-                    categories = JSON.parse($(data).find('#categoryData').attr('data-categories'));
-                    $('#categoryData tbody').html($(data).find('#categoryData tbody').html());
-                    $('#pagination').html($(data).find('#pagination').html());
-                },
-                dataType: 'html'
-            });
+        function deleteTag(id) {
+            if (confirm('Are you sure you want to delete this tag? This cannot be undone.')) {
+                fetch(`/admin/tag/delete?id=${id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            fetchData(1);
+                        } else {
+                            alert('Error deleting tag');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error deleting tag');
+                    });
+            }
         }
 
         function searchData() {
             var term = $('#search').val();
             if(term) {
                 $.ajax({
-                    url: '/admin/category',
+                    url: '/admin/tags',
                     type: 'GET',
                     data: { term: term },
                     success: function(data) {
-                        categories = $(data).find('#categoryData').attr('data-categories');
-                        $('#categoryData tbody').html($(data).find('#categoryData tbody').html());
+                        tags = JSON.parse($(data).find('#tagData').attr('data-tags'));
+                        $('#tagData tbody').html($(data).find('#tagData tbody').html());
                         $('#pagination').html("");
                     },
                     dataType: 'html'
@@ -246,6 +243,20 @@
             } else {
                 fetchData(1);
             }
+        }
+
+        function fetchData(page) {
+            $.ajax({
+                url: '/admin/tags',
+                type: 'GET',
+                data: { page: page },
+                success: function(data) {
+                    tags = JSON.parse($(data).find('#tagData').attr('data-tags'));
+                    $('#tagData tbody').html($(data).find('#tagData tbody').html());
+                    $('#pagination').html($(data).find('#pagination').html());
+                },
+                dataType: 'html'
+            });
         }
     </script>
 </body>

@@ -70,15 +70,19 @@ class UserDAO {
     }
 
     public function updateUser(User $user): bool {
-        $stmt = $this->con->prepare("UPDATE Users SET username = :username, password = :password, email = :email, role = :role, status = :status WHERE user_id = :user_id");
-        return $stmt->execute([
-            'user_id' => $user->id,
-            'username' => $user->username,
-            'password' => $user->password,
-            'email' => $user->email,
-            'role' => $user->role,
-            'status' => $user->status
-        ]);
+        try{
+            $stmt = $this->con->prepare("UPDATE Users SET username = :username, password = :password, email = :email, role = :role, status = :status WHERE user_id = :user_id");
+            return $stmt->execute([
+                'user_id' => $user->id,
+                'username' => $user->username,
+                'password' => $user->password,
+                'email' => $user->email,
+                'role' => $user->role,
+                'status' => $user->status
+            ]);
+        }catch(\PDOException){
+            return false;
+        }
     }
 
     public function deleteUser(int $id): bool {

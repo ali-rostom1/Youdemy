@@ -32,12 +32,8 @@
 
 
     //ADDING ROUTES
-    $router->add("/",function() use ($defaultController){
-        $defaultController->index();
-    });
-    $router->add("/catalogue",function() use ($defaultController){
-        $defaultController->catalogue();
-    });
+
+    //AUTH ROUTES
     $router->add("/authentification",function() use ($authController){
         $authController->index();
     });
@@ -50,17 +46,13 @@
     $router->add("/logout",function () use ($authController){
         $authController->logout();
     });
-    $router->add("/admin/dashboard",function() use ($adminController){
-        $adminController->index();
+
+    //USER/NONUSER ROUTES
+    $router->add("/",function() use ($defaultController){
+        $defaultController->index();
     });
-    $router->add("/admin/users",function() use ($adminController){
-        $adminController->users();
-    });
-    $router->add("/admin/courses",function() use ($adminController){
-        $adminController->courses();
-    });
-    $router->add("/admin/category",function() use ($adminController){
-        $adminController->category();
+    $router->add("/catalogue",function() use ($defaultController){
+        $defaultController->catalogue();
     });
     $router->add("/course/signup",function() use ($defaultController){
         $defaultController->courseSignUp();
@@ -68,6 +60,9 @@
     $router->add("/myCourses",function() use ($defaultController){
         $defaultController->myCourses();
     });
+
+
+    //TEACHER ROUTES
     $router->add("/teacher/dashboard",function() use ($teacherController){
         $teacherController->dashboard();
     });
@@ -84,7 +79,64 @@
         $teacherController->update();
     });
 
+
+
+
+
+
+
+    //
+    $router->add("/admin/dashboard",function() use ($adminController){
+        $adminController->index();
+    });
+    $router->add("/admin/users",function() use ($adminController){
+        $adminController->users();
+    });
+    $router->add("/admin/courses",function() use ($adminController){
+        $adminController->courses();
+    });
+    $router->add("/admin/category",function() use ($adminController){
+        $adminController->category();
+    });
+    $router->add("/course/delete",function () use ($teacherController){
+        $teacherController->delete();
+    });
+
     
+    //ADMIN ROUTES
+    $router->add("/ban",function() use ($adminController){
+        $adminController->ban();
+    });
+    $router->add("/approve",function() use ($adminController){
+        $adminController->approve();
+    });
+    $router->add("/suspend",function() use ($adminController){
+        $adminController->suspend();
+    });
+    
+    $router->add("/admin/category/update",function() use($adminController){
+        $adminController->updateCategory();
+    });
+    $router->add("/admin/category/delete",function() use($adminController){
+        $adminController->deleteCategory();
+    });
+    $router->add("/admin/tags",function () use ($adminController){
+        $adminController->tag();
+    });
+    $router->add("/admin/tag/update",function () use ($adminController){
+        $adminController->updateTag();
+    });
+    $router->add("/admin/tag/delete",function () use ($adminController){
+        $adminController->deleteTag();
+    });
+    $router->add("/admin/getCoursesPerTeacher",function () use ($adminController){
+        $adminController->getCoursesPerTeacher();
+    });
+    $router->add("/admin/getTopCoursesByEnrollments",function () use ($adminController){
+        $adminController->getTopCoursesByEnrollments();
+    });
+
+
     $requestedURI = $_SERVER["REQUEST_URI"];// GETTING THE REQUEST URI
     $requestedURI = parse_url($requestedURI,PHP_URL_PATH); // removing the get queries
 

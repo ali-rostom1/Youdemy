@@ -40,11 +40,15 @@ class CategoryDAO {
     }
 
     public function saveCategory(Category $category): bool {
-        $stmt = $this->con->prepare("INSERT INTO Categories (name, description) VALUES (:name, :description)");
-        return $stmt->execute([
-            'name' => $category->name,
-            'description' => $category->description
-        ]);
+        try{
+            $stmt = $this->con->prepare("INSERT INTO Categories (name, description) VALUES (:name, :description)");
+            return $stmt->execute([
+                'name' => $category->name,
+                'description' => $category->description
+            ]);
+        }catch(\PDOException){
+            return false;
+        }
     }
 
     public function updateCategory(Category $category): bool {
@@ -57,8 +61,13 @@ class CategoryDAO {
     }
 
     public function deleteCategory(int $id): bool {
-        $stmt = $this->con->prepare("DELETE FROM Categories WHERE category_id = :category_id");
-        return $stmt->execute(['category_id' => $id]);
+        try{
+            $stmt = $this->con->prepare("DELETE FROM Categories WHERE category_id = :category_id");
+            return $stmt->execute(['category_id' => $id]);
+        }catch(\PDOException){
+            return false;
+        }
+        
     }
     public function getAllCategoryPagination($page,$perPage) : array
     {
