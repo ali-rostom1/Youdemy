@@ -81,7 +81,7 @@
                      <?php foreach($courses as $course) : ?>
                     <div data-value="<?php echo $course->id ?>" class="course-card bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:shadow-lg hover:shadow-blue-500/10 transition-shadow">
                         <div class="p-6">
-                            <div class="flex items-center gap-2 mb-3">
+                            <div class="flex items-center gap-2 mb-3 flex-wrap">
                                 <?php foreach($course->tags as $index=>$tag) : ?>
                                     <?php if($index<3) : ?>
                                         <?php if($index%2 === 0) :?>
