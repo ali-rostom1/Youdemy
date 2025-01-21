@@ -36,6 +36,9 @@ class TeacherController
         if (!$this->auth->getCurrentUser() || !$this->auth->isTeacher()) {
             header("location: /authentification");
             exit;
+        }else if(!$this->auth->isActive()){
+            header("location: /redirection");
+            exit;
         }
 
 
@@ -58,6 +61,9 @@ class TeacherController
         if (!$this->auth->getCurrentUser() || !$this->auth->isTeacher()) {
             header("location: /authentification");
             exit;
+        }else if(!$this->auth->isActive()){
+            header("location: /redirection");
+            exit;
         }
         $categories = $this->categoryDAO->getAllCategories();
         $tags = $this->tagDAO->getAllTags();
@@ -69,6 +75,9 @@ class TeacherController
     {
         if (!$this->auth->getCurrentUser() || !$this->auth->isTeacher()) {
             header("location: /authentification");
+            exit;
+        }else if(!$this->auth->isActive()){
+            header("location: /redirection");
             exit;
         }
 
@@ -86,6 +95,9 @@ class TeacherController
     {
         if (!$this->auth->getCurrentUser() || !$this->auth->isTeacher()) {
             header("location: /authentification");
+            exit;
+        }else if(!$this->auth->isActive()){
+            header("location: /redirection");
             exit;
         }
         $teacher = $this->auth->getCurrentUser();
@@ -117,6 +129,9 @@ class TeacherController
         if (!$this->auth->getCurrentUser() || (!$this->auth->isTeacher() && !$this->auth->isAdmin())) {
             header("location: /authentification");
             exit;
+        }else if(!$this->auth->isActive()){
+            header("location: /redirection");
+            exit;
         }
         $teacher = $this->auth->getCurrentUser();
         $id = $_POST["id"];
@@ -147,6 +162,9 @@ class TeacherController
     {
         if (!$this->auth->getCurrentUser() || (!$this->auth->isTeacher() && !$this->auth->isAdmin())) {
             header("location: /authentification");
+            exit;
+        }else if(!$this->auth->isActive()){
+            header("location: /redirection");
             exit;
         }
         if($this->courseDAO->deleteCourse($_GET["id"])){

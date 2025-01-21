@@ -82,5 +82,10 @@ class Authentification {
     {
         return $this->hasRole("teacher");
     }
-
+    public function isActive() : bool
+    {
+        $user = $this->getCurrentUser();
+        return $user->status === "active";
+    }
+    
 }

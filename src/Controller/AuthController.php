@@ -78,4 +78,23 @@
                 header("location: /authentification?success");
             }
         }
+        public function redirection() : void
+        {
+            if($this->auth->isAuthenticated() && !$this->auth->isActive()){
+                $user = $this->auth->getCurrentUser();
+                switch($user->status){
+                    case "banned":
+                        include "../src/Views/status/banned.php";
+                        break;
+                    case "suspended":
+                        include "../src/Views/status/suspended.php";
+                        break;
+                    case "pending":
+                        include "../src/Views/status/pending.php";
+                        break;
+                    default:
+                        break;    
+                }
+            }
+        }
     }

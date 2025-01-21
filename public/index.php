@@ -78,30 +78,14 @@
     $router->add("/course/update",function() use ($teacherController){
         $teacherController->update();
     });
-
-
-
-
-
-
-
-    //
-    $router->add("/admin/dashboard",function() use ($adminController){
-        $adminController->index();
-    });
-    $router->add("/admin/users",function() use ($adminController){
-        $adminController->users();
-    });
-    $router->add("/admin/courses",function() use ($adminController){
-        $adminController->courses();
-    });
-    $router->add("/admin/category",function() use ($adminController){
-        $adminController->category();
-    });
     $router->add("/course/delete",function () use ($teacherController){
         $teacherController->delete();
     });
 
+
+
+
+    
     
     //ADMIN ROUTES
     $router->add("/ban",function() use ($adminController){
@@ -113,7 +97,6 @@
     $router->add("/suspend",function() use ($adminController){
         $adminController->suspend();
     });
-    
     $router->add("/admin/category/update",function() use($adminController){
         $adminController->updateCategory();
     });
@@ -135,6 +118,25 @@
     $router->add("/admin/getTopCoursesByEnrollments",function () use ($adminController){
         $adminController->getTopCoursesByEnrollments();
     });
+    $router->add("/admin/dashboard",function() use ($adminController){
+        $adminController->index();
+    });
+    $router->add("/admin/users",function() use ($adminController){
+        $adminController->users();
+    });
+    $router->add("/admin/courses",function() use ($adminController){
+        $adminController->courses();
+    });
+    $router->add("/admin/category",function() use ($adminController){
+        $adminController->category();
+    });
+
+    //redirection
+    $router->add("/redirection",function() use ($authController){
+        $authController->redirection();
+    });
+    
+
 
 
     $requestedURI = $_SERVER["REQUEST_URI"];// GETTING THE REQUEST URI

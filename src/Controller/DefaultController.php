@@ -30,10 +30,13 @@
         {
             if($this->auth->isAdmin()){
                 header("location: /admin/dashboard");
-                return;
-            }else if($this->auth->isTeacher()){
+                exit;
+            }else if($this->auth->isTeacher() && $this->auth->isActive()){
                 header("location: /teacher/dashboard");
-                return;
+                exit;
+            }else if($this->auth->isAuthenticated() && !$this->auth->isActive()){
+                header("location: /redirection");
+                exit;
             }
             $categories = array_slice($this->categoryDAO->getAllCategories(), 0, 3); 
             $courses = array_slice($this->courseDAO->getAllCourses(), 0, 3);
@@ -43,13 +46,15 @@
         }
         public function catalogue() : void
         {
-            if($this->auth->isAdmin())
-            {
+            if($this->auth->isAdmin()){
                 header("location: /admin/dashboard");
                 exit;
-            }else if($this->auth->isTeacher()){
+            }else if($this->auth->isTeacher() && $this->auth->isActive()){
                 header("location: /teacher/dashboard");
-                return;
+                exit;
+            }else if($this->auth->isAuthenticated() && !$this->auth->isActive()){
+                header("location: /redirection");
+                exit;
             }
 
             //GET QUERIES
@@ -79,12 +84,14 @@
         }
         public function courseSignUp() : void
         {
-            if($this->auth->getCurrentUser() && !$this->auth->isStudent()){
-                header("location: /");
+            if($this->auth->isAdmin()){
+                header("location: /admin/dashboard");
                 exit;
-            }else if(!$this->auth->getCurrentUser())
-            {
-                header("location: /authentification");
+            }else if($this->auth->isTeacher() && $this->auth->isActive()){
+                header("location: /teacher/dashboard");
+                exit;
+            }else if($this->auth->isAuthenticated() && !$this->auth->isActive()){
+                header("location: /redirection");
                 exit;
             }
 
@@ -106,13 +113,9 @@
             if($this->auth->getCurrentUser() && !$this->auth->isStudent()){
                 header("location: /");
                 exit;
-            }else if(!$this->auth->getCurrentUser())
-            {
-                header("location: /authentification");
+            }else if(!$this->auth->isActive()){
+                header("location: /redirection");
                 exit;
-            }else if($this->auth->isTeacher()){
-                header("location: /teacher/dashboard");
-                return;
             }
 
             $term = isset($_GET["term"]) ?  $_GET["term"] : "";
